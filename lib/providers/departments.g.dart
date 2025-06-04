@@ -6,7 +6,7 @@ part of 'departments.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$departmentsHash() => r'450a3bcd90eca9861244c0a88b42938bccf83a76';
+String _$departmentsHash() => r'c837d1b5e1b8c94afd1e7de609df31d1cfd31cdc';
 
 /// See also [Departments].
 @ProviderFor(Departments)

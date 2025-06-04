@@ -5,15 +5,40 @@ import 'package:schedderum/extensions/database.dart';
 import 'package:schedderum/models/department.dart' as model;
 import 'package:schedderum/models/employee.dart' as model;
 import 'package:schedderum/helpers/failure.dart';
+import 'package:schedderum/providers/preferences_provider.dart';
 import 'database.dart';
 
 part 'departments.g.dart';
 
 @riverpod
 class Departments extends _$Departments {
+  static const _kActiveDeptKey = 'active_department_id';
+  Option<model.Department> _current = none();
+
   @override
-  Future<Either<Failure, List<model.Department>>> build() =>
-      _fetchDepartments();
+  Future<Either<Failure, List<model.Department>>> build() async {
+    final prefs = ref.read(preferencesServiceProvider);
+    final idResult = prefs.getString(_kActiveDeptKey);
+    final result = await _fetchDepartments();
+
+    result.match((l) => _current = none(), (depts) {
+      _current = idResult.match(
+        (err) => optionOf(depts.firstOrNull),
+        (storedId) => depts.where((d) => d.id == storedId).head,
+      );
+    });
+
+    return result;
+  }
+
+  Option<model.Department> get current => _current;
+
+  Future<void> setCurrent(model.Department department) async {
+    _current = some(department);
+    final prefs = ref.read(preferencesServiceProvider);
+    await prefs.setString(_kActiveDeptKey, department.id);
+    state = state.whenData((r) => r);
+  }
 
   /// Shared logic for building full `Department` model list from DB.
   Future<Either<Failure, List<model.Department>>> _fetchDepartments() async {

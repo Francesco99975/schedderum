@@ -6,7 +6,7 @@ part of 'records.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$recordsHash() => r'2c652f1c187fc0390a243e28fe48c766c736f2fd';
+String _$recordsHash() => r'7a79d11e6709858a22847eddb167727ec18f8760';
 
 /// See also [Records].
 @ProviderFor(Records)
