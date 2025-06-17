@@ -54,7 +54,6 @@ class _FirstUseScreenState extends ConsumerState<FirstUseScreen> {
 
     if (departmentName.isEmpty ||
         managerFirstname.isEmpty ||
-        managerMiddlename.isEmpty ||
         managerLastname.isEmpty) {
       return Left(Failure(message: 'Please fill out all fields'));
     }
@@ -63,7 +62,8 @@ class _FirstUseScreenState extends ConsumerState<FirstUseScreen> {
         .read(departmentsProvider.notifier)
         .addDepartment(Department(id: uuid(), name: departmentName));
 
-    return response.match((l) => Left(l), (department) {
+    return response.match((l) => Left(l), (department) async {
+      await ref.read(departmentsProvider.notifier).setCurrent(department.id);
       final manager = Employee(
         id: uuid(),
         firstname: managerFirstname,
@@ -130,7 +130,9 @@ class _FirstUseScreenState extends ConsumerState<FirstUseScreen> {
     return Scaffold(
       body:
           loading
-              ? const Center(child: CircularProgressIndicator())
+              ? SafeArea(
+                child: const Center(child: CircularProgressIndicator()),
+              )
               : SafeArea(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),

@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:flutter/material.dart' show debugPrint;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:universal_io/io.dart' as universal;
 
 import 'department_dao.dart';
 import 'employee_dao.dart';
@@ -58,8 +60,33 @@ class AppDatabase extends _$AppDatabase {
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'app.db'));
+    final Directory dbFolder;
+
+    if (universal.Platform.isAndroid || universal.Platform.isIOS) {
+      dbFolder = await getApplicationDocumentsDirectory();
+    } else if (universal.Platform.isMacOS) {
+      dbFolder = await getLibraryDirectory();
+    } else if (universal.Platform.isLinux || universal.Platform.isWindows) {
+      final home =
+          universal.Platform.environment['HOME'] ??
+          universal.Platform.environment['USERPROFILE'];
+
+      if (home == null) {
+        throw UnsupportedError(
+          'No HOME or USERPROFILE environment variable found',
+        );
+      }
+
+      dbFolder = Directory(p.join(home, '.schedderum'));
+      await dbFolder.create(recursive: true);
+    } else {
+      throw UnsupportedError(
+        "Unsupported platform: ${universal.Platform.operatingSystem}",
+      );
+    }
+
+    final file = File(p.join(dbFolder.path, 'schedderum.db'));
+    debugPrint('Database located at: ${file.path}');
     return NativeDatabase(file);
   });
 }

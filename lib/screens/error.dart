@@ -14,7 +14,7 @@ class ErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: errorWidget(errorMessage, onRetry));
+    return Scaffold(body: SafeArea(child: errorWidget(errorMessage, onRetry)));
   }
 }
 

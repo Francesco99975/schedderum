@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:schedderum/models/department.dart';
 import 'package:schedderum/providers/departments.dart';
 import 'package:schedderum/providers/theme_provider.dart';
 import 'package:schedderum/screens/dashboard.dart';
+import 'package:schedderum/screens/error.dart';
 import 'package:schedderum/screens/firstuse.dart';
+import 'package:schedderum/screens/loading.dart';
 import 'package:schedderum/util/router.dart';
-import 'package:schedderum/widget/async_provider_wrapper.dart';
-import 'package:fpdart/fpdart.dart' as fp;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,16 +27,16 @@ class Schedder extends ConsumerWidget {
   }
 }
 
-class SplashView extends StatefulWidget {
+class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
 
   static const routePath = "/";
 
   @override
-  State<SplashView> createState() => _SplashViewState();
+  ConsumerState<SplashView> createState() => _SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView> {
+class _SplashViewState extends ConsumerState<SplashView> {
   @override
   void initState() {
     super.initState();
@@ -45,13 +44,29 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   Widget build(BuildContext context) {
-    return AsyncProviderWrapper<List<Department>>(
-      provider: departmentsProvider,
-      future: departmentsProvider.future,
-      errorOverride: const fp.Option.of(FirstUseScreen()),
-      render: (user) {
-        return const DashboardScreen();
+    final d = ref.watch(departmentsProvider);
+
+    return d.when(
+      data: (data) {
+        return data.match(
+          (l) {
+            return const FirstUseScreen();
+          },
+          (depts) {
+            if (depts.isEmpty) {
+              return const FirstUseScreen();
+            } else {
+              return const DashboardScreen();
+            }
+          },
+        );
       },
+      error:
+          (error, _) => ErrorScreen(
+            errorMessage: "runtime error: $error",
+            onRetry: () => ref.refresh(departmentsProvider.future),
+          ),
+      loading: () => const LoadingScreen(),
     );
   }
 }

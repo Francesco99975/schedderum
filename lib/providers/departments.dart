@@ -6,6 +6,7 @@ import 'package:schedderum/models/department.dart' as model;
 import 'package:schedderum/models/employee.dart' as model;
 import 'package:schedderum/helpers/failure.dart';
 import 'package:schedderum/providers/preferences_provider.dart';
+import 'package:schedderum/util/preferences_service.dart';
 import 'database.dart';
 
 part 'departments.g.dart';
@@ -17,7 +18,8 @@ class Departments extends _$Departments {
 
   @override
   Future<Either<Failure, List<model.Department>>> build() async {
-    final prefs = ref.read(preferencesServiceProvider);
+    final instance = await ref.read(sharedPreferencesProvider.future);
+    final prefs = PreferencesService(instance);
     final idResult = prefs.getString(_kActiveDeptKey);
     final result = await _fetchDepartments();
 
@@ -33,10 +35,16 @@ class Departments extends _$Departments {
 
   Option<model.Department> get current => _current;
 
-  Future<void> setCurrent(model.Department department) async {
-    _current = some(department);
-    final prefs = ref.read(preferencesServiceProvider);
-    await prefs.setString(_kActiveDeptKey, department.id);
+  Future<void> setCurrent(String departmentId) async {
+    final instance = await ref.read(sharedPreferencesProvider.future);
+    final prefs = PreferencesService(instance);
+    await prefs.setString(_kActiveDeptKey, departmentId);
+
+    final result = await _fetchDepartments();
+
+    result.match((l) => _current = none(), (depts) {
+      _current = depts.where((d) => d.id == departmentId).head;
+    });
     state = state.whenData((r) => r);
   }
 
@@ -44,6 +52,7 @@ class Departments extends _$Departments {
   Future<Either<Failure, List<model.Department>>> _fetchDepartments() async {
     try {
       final db = ref.read(databaseProvider);
+
       final deptDao = db.departmentDao;
       final empDao = db.employeeDao;
       final recDao = db.recordDao;
@@ -94,6 +103,7 @@ class Departments extends _$Departments {
       final dao = ref.read(databaseProvider).departmentDao;
       await dao.updateDepartment(d);
       final updated = await _fetchDepartments();
+      setCurrent(d.id);
       state = AsyncValue.data(updated);
       return Right(d);
     } catch (e) {
@@ -113,3 +123,8 @@ class Departments extends _$Departments {
     }
   }
 }
+
+final dbDepartmentsProvider = FutureProvider((ref) async {
+  final db = ref.watch(databaseProvider);
+  return db.departmentDao.getAllDepartments();
+});
