@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:schedderum/providers/departments.dart';
 import 'package:schedderum/database/database.dart';
+import 'package:schedderum/util/formatters.dart';
 
 class DepartmentPopupMenu extends ConsumerStatefulWidget {
   const DepartmentPopupMenu({super.key});
@@ -14,6 +14,7 @@ class DepartmentPopupMenu extends ConsumerStatefulWidget {
 
 class _DepartmentPopupMenuState extends ConsumerState<DepartmentPopupMenu> {
   String? editingId;
+  String? confirmDeleteId;
   final Map<String, TextEditingController> _controllers = {};
   final TextEditingController _newController = TextEditingController();
 
@@ -98,6 +99,8 @@ class _DepartmentPopupMenuState extends ConsumerState<DepartmentPopupMenu> {
                                             ...departments.map((dept) {
                                               final isEditing =
                                                   editingId == dept.id;
+                                              final isConfirmingDelete =
+                                                  confirmDeleteId == dept.id;
                                               final controller = _controllers
                                                   .putIfAbsent(
                                                     dept.id,
@@ -112,91 +115,178 @@ class _DepartmentPopupMenuState extends ConsumerState<DepartmentPopupMenu> {
                                               final isLast =
                                                   departments.length == 1;
 
-                                              return Row(
-                                                children: [
-                                                  Expanded(
-                                                    child:
-                                                        isEditing
-                                                            ? TextField(
-                                                              controller:
-                                                                  controller,
-                                                              autofocus: true,
-                                                              onSubmitted: (_) {
-                                                                _saveEdit(
-                                                                  dept.toDbModel(),
-                                                                );
-                                                                updateMenu();
-                                                              },
-                                                            )
-                                                            : GestureDetector(
-                                                              onTap: () {
-                                                                ref
-                                                                    .read(
-                                                                      departmentsProvider
-                                                                          .notifier,
-                                                                    )
-                                                                    .setCurrent(
-                                                                      dept.id,
-                                                                    );
-                                                                Navigator.pop(
-                                                                  context,
-                                                                );
-                                                              },
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets.symmetric(
-                                                                      vertical:
-                                                                          8,
+                                              return Container(
+                                                decoration:
+                                                    isSelected
+                                                        ? BoxDecoration(
+                                                          color: theme
+                                                              .colorScheme
+                                                              .primary
+                                                              .withAlpha(25),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                6,
+                                                              ),
+                                                        )
+                                                        : null,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 4,
+                                                    ),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child:
+                                                          isEditing
+                                                              ? TextField(
+                                                                controller:
+                                                                    controller,
+                                                                autofocus: true,
+                                                                onSubmitted: (
+                                                                  _,
+                                                                ) {
+                                                                  _saveEdit(
+                                                                    dept.toDbModel(),
+                                                                  );
+                                                                  updateMenu();
+                                                                },
+                                                              )
+                                                              : GestureDetector(
+                                                                onTap: () {
+                                                                  ref
+                                                                      .read(
+                                                                        departmentsProvider
+                                                                            .notifier,
+                                                                      )
+                                                                      .setCurrent(
+                                                                        dept.id,
+                                                                      );
+                                                                  Navigator.pop(
+                                                                    context,
+                                                                  );
+                                                                },
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets.symmetric(
+                                                                        vertical:
+                                                                            8,
+                                                                      ),
+                                                                  child: Text(
+                                                                    '${dept.name} (${formatDuration(dept.getRangedDuration(DateTime.now(), DateTime.now().add(Duration(days: 7))))})',
+                                                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                                                      fontWeight:
+                                                                          isSelected
+                                                                              ? FontWeight.bold
+                                                                              : null,
+                                                                      color:
+                                                                          isSelected
+                                                                              ? theme.colorScheme.primary
+                                                                              : null,
                                                                     ),
-                                                                child: Text(
-                                                                  dept.name,
-                                                                  style:
-                                                                      theme
-                                                                          .textTheme
-                                                                          .bodyMedium,
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                  ),
-                                                  IconButton(
-                                                    icon: Icon(
-                                                      isEditing
-                                                          ? Icons.check
-                                                          : Icons.edit,
-                                                      size: 18,
                                                     ),
-                                                    onPressed: () {
-                                                      if (isEditing) {
-                                                        _saveEdit(
-                                                          dept.toDbModel(),
-                                                        );
-                                                      } else {
-                                                        editingId = dept.id;
-                                                      }
-                                                      updateMenu();
-                                                    },
-                                                  ),
-                                                  if (!isLast && !isSelected)
-                                                    IconButton(
-                                                      icon: const Icon(
-                                                        Icons.close,
-                                                        size: 18,
-                                                      ),
-                                                      onPressed: () async {
-                                                        await ref
-                                                            .read(
-                                                              departmentsProvider
-                                                                  .notifier,
-                                                            )
-                                                            .removeDepartment(
+                                                    if (isConfirmingDelete)
+                                                      Row(
+                                                        children: [
+                                                          TextButton(
+                                                            style: TextButton.styleFrom(
+                                                              backgroundColor:
+                                                                  theme
+                                                                      .colorScheme
+                                                                      .error
+                                                                      .withAlpha(
+                                                                        30,
+                                                                      ),
+                                                            ),
+                                                            onPressed: () async {
+                                                              await ref
+                                                                  .read(
+                                                                    departmentsProvider
+                                                                        .notifier,
+                                                                  )
+                                                                  .removeDepartment(
+                                                                    dept.toDbModel(),
+                                                                  );
+                                                              confirmDeleteId =
+                                                                  null;
+                                                              updateMenu();
+                                                            },
+                                                            child: Text(
+                                                              'Delete',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    theme
+                                                                        .colorScheme
+                                                                        .error,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 4,
+                                                          ),
+                                                          TextButton(
+                                                            style: TextButton.styleFrom(
+                                                              backgroundColor:
+                                                                  theme
+                                                                      .colorScheme
+                                                                      .secondary
+                                                                      .withAlpha(
+                                                                        30,
+                                                                      ),
+                                                            ),
+                                                            onPressed: () {
+                                                              confirmDeleteId =
+                                                                  null;
+                                                              updateMenu();
+                                                            },
+                                                            child: const Text(
+                                                              'Cancel',
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    else ...[
+                                                      IconButton(
+                                                        icon: Icon(
+                                                          isEditing
+                                                              ? Icons.check
+                                                              : Icons.edit,
+                                                          size: 18,
+                                                        ),
+                                                        onPressed: () {
+                                                          if (isEditing) {
+                                                            _saveEdit(
                                                               dept.toDbModel(),
                                                             );
-                                                        updateMenu();
-                                                      },
-                                                    )
-                                                  else
-                                                    const SizedBox(width: 40),
-                                                ],
+                                                          } else {
+                                                            editingId = dept.id;
+                                                          }
+                                                          updateMenu();
+                                                        },
+                                                      ),
+                                                      if (!isLast &&
+                                                          !isSelected)
+                                                        IconButton(
+                                                          icon: const Icon(
+                                                            Icons.close,
+                                                            size: 18,
+                                                          ),
+                                                          onPressed: () {
+                                                            confirmDeleteId =
+                                                                dept.id;
+                                                            updateMenu();
+                                                          },
+                                                        )
+                                                      else
+                                                        const SizedBox(
+                                                          width: 40,
+                                                        ),
+                                                    ],
+                                                  ],
+                                                ),
                                               );
                                             }),
                                             const Divider(),
@@ -205,11 +295,22 @@ class _DepartmentPopupMenuState extends ConsumerState<DepartmentPopupMenu> {
                                                 Expanded(
                                                   child: TextField(
                                                     controller: _newController,
-                                                    decoration:
-                                                        const InputDecoration(
-                                                          hintText: 'new dept',
-                                                          isDense: true,
-                                                        ),
+                                                    decoration: InputDecoration(
+                                                      hintText:
+                                                          'New department',
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          const EdgeInsets.symmetric(
+                                                            horizontal: 12,
+                                                            vertical: 10,
+                                                          ),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              8,
+                                                            ),
+                                                      ),
+                                                    ),
                                                     onSubmitted: (_) {
                                                       _createNew();
                                                       updateMenu();
@@ -238,38 +339,44 @@ class _DepartmentPopupMenuState extends ConsumerState<DepartmentPopupMenu> {
                   ],
                 );
                 editingId = null;
+                confirmDeleteId = null;
                 _rebuild();
               },
               child: Consumer(
                 builder: (context, ref, _) {
-                  final selected = ref
-                      .watch(departmentsProvider.notifier)
-                      .current
-                      .map((d) => d.name)
-                      .getOrElse(() => 'Select Dept');
-                  return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: theme.colorScheme.primary.withValues(alpha: 0.1),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            selected,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodyMedium,
-                          ),
+                  final selected =
+                      ref.watch(departmentsProvider.notifier).current;
+
+                  return selected.match(
+                    () {
+                      return const Text('Select a department');
+                    },
+                    (dept) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
                         ),
-                        const SizedBox(width: 4),
-                        const Icon(Icons.arrow_drop_down),
-                      ],
-                    ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: theme.colorScheme.primary.withAlpha(25),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                '${dept.name} (${formatDuration(dept.getRangedDuration(DateTime.now(), DateTime.now().add(Duration(days: 7))))})',
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.bodyMedium,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            const Icon(Icons.arrow_drop_down),
+                          ],
+                        ),
+                      );
+                    },
                   );
                 },
               ),

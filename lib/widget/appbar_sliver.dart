@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:schedderum/providers/departments.dart';
+import 'package:schedderum/util/formatters.dart';
 import 'package:schedderum/widget/department_selector.dart';
 import 'package:schedderum/widget/settings_dropdown.dart';
 
@@ -13,13 +14,6 @@ class AppHeaderBarSliver extends ConsumerWidget {
     required this.weekStart,
     required this.weekEnd,
   });
-
-  String _formatDuration(Duration d) {
-    final hours = d.inMinutes / 60.0;
-    return hours % 1 == 0
-        ? "${hours.toInt()}H"
-        : "${hours.toStringAsFixed(1)}H";
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,7 +65,7 @@ class AppHeaderBarSliver extends ConsumerWidget {
                               );
                               return Chip(
                                 label: Text(
-                                  _formatDuration(duration),
+                                  formatDuration(duration),
                                   style: Theme.of(context).textTheme.bodyMedium
                                       ?.copyWith(fontWeight: FontWeight.bold),
                                   overflow: TextOverflow.ellipsis,
