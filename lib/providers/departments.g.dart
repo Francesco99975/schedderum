@@ -6,7 +6,27 @@ part of 'departments.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$departmentsHash() => r'9c2c3a87594665e92bf473c33d00262fc0960949';
+String _$currentDepartmentHash() => r'9aab44f024d95107057132566faa23fe3500a1b9';
+
+/// See also [CurrentDepartment].
+@ProviderFor(CurrentDepartment)
+final currentDepartmentProvider = AutoDisposeAsyncNotifierProvider<
+  CurrentDepartment,
+  Option<model.Department>
+>.internal(
+  CurrentDepartment.new,
+  name: r'currentDepartmentProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$currentDepartmentHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$CurrentDepartment =
+    AutoDisposeAsyncNotifier<Option<model.Department>>;
+String _$departmentsHash() => r'ea946cfae0720fa798056a180b20929a80f7afdd';
 
 /// See also [Departments].
 @ProviderFor(Departments)

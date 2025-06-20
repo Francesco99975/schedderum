@@ -3,12 +3,12 @@ import 'package:schedderum/models/employee.dart';
 import 'package:schedderum/util/responsive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class EmployeeWeekCard extends StatelessWidget {
+class EmployeeItem extends StatelessWidget {
   final Employee employee;
   final DateTime from;
   final DateTime to;
 
-  const EmployeeWeekCard({
+  const EmployeeItem({
     super.key,
     required this.employee,
     required this.from,

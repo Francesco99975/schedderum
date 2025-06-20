@@ -12,40 +12,45 @@ import 'database.dart';
 part 'departments.g.dart';
 
 @riverpod
-class Departments extends _$Departments {
+class CurrentDepartment extends _$CurrentDepartment {
   static const _kActiveDeptKey = 'active_department_id';
-  Option<model.Department> _current = none();
-
   @override
-  Future<Either<Failure, List<model.Department>>> build() async {
+  Future<Option<model.Department>> build() async {
     final instance = await ref.read(sharedPreferencesProvider.future);
     final prefs = PreferencesService(instance);
     final idResult = prefs.getString(_kActiveDeptKey);
-    final result = await _fetchDepartments();
 
-    result.match((l) => _current = none(), (depts) {
-      _current = idResult.match(
+    final depts = await ref.watch(departmentsProvider.future);
+    return depts.match((l) => none(), (depts) {
+      return idResult.match(
         (err) => optionOf(depts.firstOrNull),
         (storedId) => depts.where((d) => d.id == storedId).head,
       );
     });
-
-    return result;
   }
-
-  Option<model.Department> get current => _current;
 
   Future<void> setCurrent(String departmentId) async {
     final instance = await ref.read(sharedPreferencesProvider.future);
     final prefs = PreferencesService(instance);
     await prefs.setString(_kActiveDeptKey, departmentId);
 
+    final result = await ref.watch(departmentsProvider.future);
+
+    result.match((l) => state = AsyncData(none()), (depts) {
+      state = AsyncData(depts.where((d) => d.id == departmentId).head);
+    });
+  }
+}
+
+@riverpod
+class Departments extends _$Departments {
+  // Option<model.Department> _current = none();
+
+  @override
+  Future<Either<Failure, List<model.Department>>> build() async {
     final result = await _fetchDepartments();
 
-    result.match((l) => _current = none(), (depts) {
-      _current = depts.where((d) => d.id == departmentId).head;
-    });
-    state = state.whenData((r) => r);
+    return result;
   }
 
   /// Shared logic for building full `Department` model list from DB.
@@ -103,7 +108,7 @@ class Departments extends _$Departments {
       final dao = ref.read(databaseProvider).departmentDao;
       await dao.updateDepartment(d);
       final updated = await _fetchDepartments();
-      setCurrent(d.id);
+
       state = AsyncValue.data(updated);
       return Right(d);
     } catch (e) {

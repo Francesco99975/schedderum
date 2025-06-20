@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:schedderum/helpers/failure.dart';
 import 'package:schedderum/screens/error.dart';
 import 'package:schedderum/screens/loading.dart';
 
-class AsyncProviderWrapper<T> extends ConsumerWidget {
-  final ProviderListenable<AsyncValue<Either<Failure, T>>> provider;
-  final Refreshable<Future<Either<Failure, T>>> future;
+class AsyncProviderOptional<T> extends ConsumerWidget {
+  final ProviderListenable<AsyncValue<Option<T>>> provider;
+  final Refreshable<Future<Option<T>>> future;
   final Widget Function(T) render;
   final Option<Widget> errorOverride;
 
-  const AsyncProviderWrapper({
+  const AsyncProviderOptional({
     super.key,
     required this.provider,
     required this.future,
@@ -26,9 +25,9 @@ class AsyncProviderWrapper<T> extends ConsumerWidget {
     return state.when(
       data:
           (value) => value.match(
-            (l) => errorOverride.match(
+            () => errorOverride.match(
               () => ErrorScreen(
-                errorMessage: "server error: ${l.message}",
+                errorMessage: "runtime error",
                 onRetry: () => ref.refresh(future),
               ),
               (override) => override,

@@ -63,7 +63,9 @@ class _FirstUseScreenState extends ConsumerState<FirstUseScreen> {
         .addDepartment(Department(id: uuid(), name: departmentName));
 
     return response.match((l) => Left(l), (department) async {
-      await ref.read(departmentsProvider.notifier).setCurrent(department.id);
+      await ref
+          .read(currentDepartmentProvider.notifier)
+          .setCurrent(department.id);
       final manager = Employee(
         id: uuid(),
         firstname: managerFirstname,
