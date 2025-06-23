@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:schedderum/models/department.dart';
 
 import 'package:schedderum/screens/employees.dart';
+import 'package:schedderum/screens/schedule.dart';
 import 'package:schedderum/widget/appbar_sliver.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -33,7 +34,10 @@ class DashboardScreen extends ConsumerWidget {
                 ],
             body: TabBarView(
               children: [
-                Center(child: Text('Schedule View Placeholder')),
+                ScheduleScreen(
+                  currentDepartment: currentDepartment,
+                  weekStart: activeWeek,
+                ),
                 EmployeesScreen(
                   currentDepartment: currentDepartment,
                   weekStart: activeWeek,

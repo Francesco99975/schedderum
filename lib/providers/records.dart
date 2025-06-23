@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:schedderum/helpers/failure.dart';
 import 'package:schedderum/extensions/database.dart';
-import 'package:schedderum/models/record.dart' as model;
+import 'package:schedderum/models/display_record.dart';
 import 'package:schedderum/database/database.dart' as db;
 import 'database.dart';
 
@@ -11,24 +11,62 @@ part 'records.g.dart';
 @riverpod
 class Records extends _$Records {
   @override
-  Future<Either<Failure, List<model.Record>>> build() => _fetchRecords();
+  Future<Either<Failure, List<DisplayRecord>>> build(
+    String departmentId,
+    DateTime weekStart,
+    DateTime weekEnd,
+  ) async => _fetchRecords(departmentId, weekStart, weekEnd);
 
-  Future<Either<Failure, List<model.Record>>> _fetchRecords() async {
+  Future<Either<Failure, List<DisplayRecord>>> _fetchRecords(
+    String departmentId,
+    DateTime weekStart,
+    DateTime weekEnd,
+  ) async {
     try {
-      final dao = ref.read(databaseProvider).recordDao;
-      final records = await dao.getAllRecords();
-      final result = records.map((r) => r.toModel()).toList();
-      return Right(result);
+      final db = ref.read(databaseProvider);
+      final empDao = db.employeeDao;
+      final recDao = db.recordDao;
+
+      final rawEmps = await empDao.getEmployeesByDepartment(departmentId);
+      final rawRecs = await recDao.getAllRecords();
+
+      final employeeMap = {for (final e in rawEmps) e.id: e.toModel([])};
+
+      final displayRecords = <DisplayRecord>[];
+
+      for (final r in rawRecs) {
+        if (r.start.isBefore(weekStart) || r.end.isAfter(weekEnd)) continue;
+
+        final emp = employeeMap[r.employeeId];
+        if (emp == null) continue;
+
+        displayRecords.add(
+          DisplayRecord(
+            record: r.toModel(),
+            employeeFullName: emp.getFullName(),
+            employeeColor: emp.color,
+            employeeId: emp.id,
+          ),
+        );
+      }
+
+      return Right(displayRecords);
     } catch (e) {
       return Left(Failure(message: "Failed to load records: $e"));
     }
   }
 
-  Future<Either<Failure, db.Record>> addRecord(db.Record r) async {
+  Future<Either<Failure, db.Record>> addRecord(
+    db.Record r,
+    String departmentId,
+    DateTime weekStart,
+    DateTime weekEnd,
+  ) async {
     try {
       final dao = ref.read(databaseProvider).recordDao;
       await dao.insertRecord(r);
-      final updated = await _fetchRecords();
+
+      final updated = await _fetchRecords(departmentId, weekStart, weekEnd);
       state = AsyncValue.data(updated);
       return Right(r);
     } catch (e) {
@@ -36,11 +74,16 @@ class Records extends _$Records {
     }
   }
 
-  Future<Either<Failure, db.Record>> updateRecord(db.Record r) async {
+  Future<Either<Failure, db.Record>> updateRecord(
+    db.Record r,
+    String departmentId,
+    DateTime weekStart,
+    DateTime weekEnd,
+  ) async {
     try {
       final dao = ref.read(databaseProvider).recordDao;
       await dao.updateRecord(r);
-      final updated = await _fetchRecords();
+      final updated = await _fetchRecords(departmentId, weekStart, weekEnd);
       state = AsyncValue.data(updated);
       return Right(r);
     } catch (e) {
@@ -48,28 +91,20 @@ class Records extends _$Records {
     }
   }
 
-  Future<Either<Failure, db.Record>> removeRecord(db.Record r) async {
+  Future<Either<Failure, db.Record>> removeRecord(
+    db.Record r,
+    String departmentId,
+    DateTime weekStart,
+    DateTime weekEnd,
+  ) async {
     try {
       final dao = ref.read(databaseProvider).recordDao;
       await dao.deleteRecord(r.id);
-      final updated = await _fetchRecords();
+      final updated = await _fetchRecords(departmentId, weekStart, weekEnd);
       state = AsyncValue.data(updated);
       return Right(r);
     } catch (e) {
       return Left(Failure(message: "Delete failed: $e"));
-    }
-  }
-
-  Future<Either<Failure, List<model.Record>>> getRecordsInRange(
-    DateTime from,
-    DateTime to,
-  ) async {
-    try {
-      final dao = ref.read(databaseProvider).recordDao;
-      final result = await dao.getRecordsInRange(from, to);
-      return Right(result.map((r) => r.toModel()).toList());
-    } catch (e) {
-      return Left(Failure(message: "Get in range failed: $e"));
     }
   }
 }
