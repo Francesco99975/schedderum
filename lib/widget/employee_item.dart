@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:schedderum/models/employee.dart';
 import 'package:schedderum/util/responsive.dart';
+import 'package:schedderum/widget/employee_form_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EmployeeItem extends StatelessWidget {
   final Employee employee;
   final DateTime from;
   final DateTime to;
+  final Function onDismissed;
+  final String currentDepartmentId;
 
   const EmployeeItem({
     super.key,
     required this.employee,
     required this.from,
     required this.to,
+    required this.onDismissed,
+    required this.currentDepartmentId,
   });
 
   void _launchPhone(String phone) async {
@@ -37,65 +42,126 @@ class EmployeeItem extends StatelessWidget {
     return "${hours.toStringAsFixed(1)}H";
   }
 
+  Future<void> _openForm(
+    String currentDepartmentId,
+    BuildContext context, [
+    Employee? existing,
+  ]) async {
+    await showDialog<Employee>(
+      context: context,
+      builder:
+          (BuildContext context) => EmployeeFormDialog(
+            initial: existing,
+            currentDepartmentId: currentDepartmentId,
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final borderColor =
-        employee.isManager ? Colors.amber : Colors.grey.shade300;
-    final borderWidth = employee.isManager ? 2.5 : 1.0;
-
     final duration = employee.getRangedDuration(from, to);
     final shiftCount = employee.weekStatus(from, to);
+    final color = Color(employee.color);
+    final borderColor =
+        employee.isManager ? Colors.amber : Colors.grey.shade300;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        border: Border.all(color: borderColor, width: borderWidth),
-        borderRadius: BorderRadius.circular(16),
+    return Dismissible(
+      key: ValueKey(employee.id),
+      direction: DismissDirection.startToEnd, // left to right
+      onDismissed: (direction) => onDismissed(direction),
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.startToEnd) {
+          return await showDialog(
+            context: context,
+            builder:
+                (context) => AlertDialog(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  title: Text(
+                    "Are you sure ?",
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  content: Text(
+                    "Do you want to remove this employee?",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text(
+                        "No",
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium!.copyWith(color: Colors.red),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(false),
+                    ),
+                    TextButton(
+                      child: Text(
+                        "Yes",
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium!.copyWith(color: Colors.green),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(true),
+                    ),
+                  ],
+                ),
+          );
+        }
+        return false;
+      },
+      background: Container(
+        color: Colors.redAccent,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        alignment: Alignment.centerLeft,
+        child: const Icon(Icons.delete, color: Colors.white),
       ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: Color(employee.color),
-            radius: 24,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: borderColor,
+            width: employee.isManager ? 2.5 : 1.0,
+          ),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        child: ListTile(
+          onTap: () => _openForm(currentDepartmentId, context, employee),
+          leading: CircleAvatar(
+            backgroundColor: color,
             child: Text(
               _formatDuration(duration),
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: getContrastingTextColor(Color(employee.color)),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: getContrastingTextColor(color),
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  employee.getFullName(),
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  shiftCount,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
-                ),
-              ],
-            ),
+          title: Text(
+            employee.getFullName(),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
           ),
-          IconButton(
-            icon: const Icon(Icons.phone),
-            onPressed: () => _launchPhone(employee.phone),
+          subtitle: Text(
+            shiftCount,
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
           ),
-          IconButton(
-            icon: const Icon(Icons.mail),
-            onPressed: () => _launchEmail(employee.email),
+          trailing: Wrap(
+            spacing: 6,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.phone),
+                onPressed: () => _launchPhone(employee.phone),
+              ),
+              IconButton(
+                icon: const Icon(Icons.mail),
+                onPressed: () => _launchEmail(employee.email),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

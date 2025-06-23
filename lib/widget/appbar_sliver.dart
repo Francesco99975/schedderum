@@ -48,7 +48,7 @@ class AppHeaderBarSliver extends ConsumerWidget {
                         AsyncProviderReplacer(
                           provider: departmentsProvider,
                           fallback: (l) => Text("Error: ${l.message}"),
-                          render: (departments) => DepartmentPopupMenu(),
+                          render: (_) => DepartmentPopupMenu(),
                         ),
 
                         const SizedBox(width: 12),

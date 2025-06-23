@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:schedderum/models/department.dart';
 import 'package:schedderum/models/employee.dart';
-import 'package:schedderum/providers/departments.dart';
+import 'package:schedderum/providers/employees.dart';
 import 'package:schedderum/providers/week_context_provider.dart';
+import 'package:schedderum/widget/async_provider_wrapper.dart';
+import 'package:schedderum/widget/employee_form_dialog.dart';
 import 'package:schedderum/widget/employee_item.dart';
 
 class EmployeesScreen extends ConsumerStatefulWidget {
@@ -25,114 +27,156 @@ class _EmployeesScreenState extends ConsumerState<EmployeesScreen> {
   EmployeeSortOption _sortOption = EmployeeSortOption.defaultOrder;
   bool _isDescending = true;
 
+  Future<void> _openForm(
+    String currentDepartmentId,
+    BuildContext context, [
+    Employee? existing,
+  ]) async {
+    await showDialog<Employee>(
+      context: context,
+      builder:
+          (BuildContext context) => EmployeeFormDialog(
+            initial: existing,
+            currentDepartmentId: currentDepartmentId,
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final weekStart = widget.weekStart;
     final weekEnd = endOfWeek(weekStart);
-    final employees = widget.currentDepartment.employees;
-    employees.sort((a, b) {
-      int result;
-      switch (_sortOption) {
-        case EmployeeSortOption.hours:
-          result = b
-              .getRangedDuration(weekStart, weekEnd)
-              .compareTo(a.getRangedDuration(weekStart, weekEnd));
-          break;
-        case EmployeeSortOption.firstName:
-          result = a.firstname.compareTo(b.firstname);
-          break;
-        case EmployeeSortOption.lastName:
-          result = a.lastname.compareTo(b.lastname);
-          break;
-        case EmployeeSortOption.shiftCount:
-          result = b
-              .getWeeklyShiftCount(weekStart, weekEnd)
-              .compareTo(a.getWeeklyShiftCount(weekStart, weekEnd));
-          break;
-        case EmployeeSortOption.defaultOrder:
-          result = 0;
-          break;
-      }
-      return _isDescending ? result : -result;
-    });
 
-    return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Employees',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return AsyncProviderWrapper<List<Employee>>(
+      provider: employeesByDepartmentProvider(widget.currentDepartment.id),
+      future: employeesByDepartmentProvider(widget.currentDepartment.id).future,
+      render: (employees) {
+        employees.sort((a, b) {
+          int result;
+          switch (_sortOption) {
+            case EmployeeSortOption.hours:
+              result = b
+                  .getRangedDuration(weekStart, weekEnd)
+                  .compareTo(a.getRangedDuration(weekStart, weekEnd));
+              break;
+            case EmployeeSortOption.firstName:
+              result = a.firstname.compareTo(b.firstname);
+              break;
+            case EmployeeSortOption.lastName:
+              result = a.lastname.compareTo(b.lastname);
+              break;
+            case EmployeeSortOption.shiftCount:
+              result = b
+                  .getWeeklyShiftCount(weekStart, weekEnd)
+                  .compareTo(a.getWeeklyShiftCount(weekStart, weekEnd));
+              break;
+            case EmployeeSortOption.defaultOrder:
+              result = 0;
+              break;
+          }
+          return _isDescending ? result : -result;
+        });
+
+        return Scaffold(
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
                 ),
-                Row(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    DropdownButton<EmployeeSortOption>(
-                      value: _sortOption,
-                      onChanged:
-                          (newValue) => setState(() => _sortOption = newValue!),
-                      items: const [
-                        DropdownMenuItem(
-                          value: EmployeeSortOption.defaultOrder,
-                          child: Text('Default'),
+                    const Text(
+                      'Employees',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        DropdownButton<EmployeeSortOption>(
+                          value: _sortOption,
+                          onChanged:
+                              (newValue) =>
+                                  setState(() => _sortOption = newValue!),
+                          items: const [
+                            DropdownMenuItem(
+                              value: EmployeeSortOption.defaultOrder,
+                              child: Text('Default'),
+                            ),
+                            DropdownMenuItem(
+                              value: EmployeeSortOption.hours,
+                              child: Text('Hours worked'),
+                            ),
+                            DropdownMenuItem(
+                              value: EmployeeSortOption.firstName,
+                              child: Text('First name'),
+                            ),
+                            DropdownMenuItem(
+                              value: EmployeeSortOption.lastName,
+                              child: Text('Last name'),
+                            ),
+                            DropdownMenuItem(
+                              value: EmployeeSortOption.shiftCount,
+                              child: Text('Shift count'),
+                            ),
+                          ],
                         ),
-                        DropdownMenuItem(
-                          value: EmployeeSortOption.hours,
-                          child: Text('Hours worked'),
-                        ),
-                        DropdownMenuItem(
-                          value: EmployeeSortOption.firstName,
-                          child: Text('First name'),
-                        ),
-                        DropdownMenuItem(
-                          value: EmployeeSortOption.lastName,
-                          child: Text('Last name'),
-                        ),
-                        DropdownMenuItem(
-                          value: EmployeeSortOption.shiftCount,
-                          child: Text('Shift count'),
+                        IconButton(
+                          icon: Icon(
+                            _isDescending
+                                ? Icons.arrow_downward
+                                : Icons.arrow_upward,
+                            size: 20,
+                          ),
+                          tooltip: _isDescending ? "Descending" : "Ascending",
+                          onPressed:
+                              () => setState(
+                                () => _isDescending = !_isDescending,
+                              ),
                         ),
                       ],
                     ),
-                    IconButton(
-                      icon: Icon(
-                        _isDescending
-                            ? Icons.arrow_downward
-                            : Icons.arrow_upward,
-                        size: 20,
-                      ),
-                      tooltip: _isDescending ? "Descending" : "Ascending",
-                      onPressed:
-                          () => setState(() => _isDescending = !_isDescending),
-                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 80),
+                  itemCount: employees.length,
+                  itemBuilder:
+                      (context, index) => EmployeeItem(
+                        employee: employees[index],
+                        from: weekStart,
+                        to: weekEnd,
+                        currentDepartmentId: widget.currentDepartment.id,
+                        onDismissed: (DismissDirection direction) async {
+                          if (direction == DismissDirection.startToEnd) {
+                            await ref
+                                .read(employeesProvider.notifier)
+                                .removeEmployee(
+                                  employees[index].toDbModel(
+                                    widget.currentDepartment.id,
+                                  ),
+                                );
+                          }
+                        },
+                      ),
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.only(bottom: 80),
-              itemCount: employees.length,
-              itemBuilder:
-                  (context, index) => EmployeeItem(
-                    employee: employees[index],
-                    from: weekStart,
-                    to: weekEnd,
-                  ),
-            ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              _openForm(widget.currentDepartment.id, context);
+            },
+            child: const Icon(Icons.add),
           ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO: Add employee creation flow
-        },
-        child: const Icon(Icons.add),
-      ),
+        );
+      },
     );
   }
 }

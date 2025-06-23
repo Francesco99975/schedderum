@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:schedderum/helpers/failure.dart';
@@ -42,6 +43,9 @@ class Employees extends _$Employees {
     try {
       final dao = ref.read(databaseProvider).employeeDao;
       await dao.insertEmployee(employee);
+
+      ref.invalidate(employeesByDepartmentProvider(employee.departmentId));
+
       final updated = await _fetchEmployees();
       state = AsyncValue.data(updated);
       return Right(employee);
@@ -54,6 +58,7 @@ class Employees extends _$Employees {
     try {
       final dao = ref.read(databaseProvider).employeeDao;
       await dao.updateEmployee(employee);
+      ref.invalidate(employeesByDepartmentProvider(employee.departmentId));
       final updated = await _fetchEmployees();
       state = AsyncValue.data(updated);
       return Right(employee);
@@ -98,5 +103,33 @@ class Employees extends _$Employees {
     } catch (e) {
       return Left(Failure(message: "Query failed: $e"));
     }
+  }
+}
+
+@riverpod
+Future<Either<Failure, List<model.Employee>>> employeesByDepartment(
+  Ref ref,
+  String departmentId,
+) async {
+  try {
+    final db = ref.read(databaseProvider);
+    final empDao = db.employeeDao;
+    final recDao = db.recordDao;
+
+    final rawEmps = await empDao.getEmployeesByDepartment(departmentId);
+    final rawRecs = await recDao.getAllRecords();
+
+    final groupedRecs = <String, List<model.Record>>{};
+    for (final r in rawRecs) {
+      final recordModel = r.toModel();
+      groupedRecs.putIfAbsent(r.employeeId, () => []).add(recordModel);
+    }
+
+    final result =
+        rawEmps.map((e) => e.toModel(groupedRecs[e.id] ?? [])).toList();
+
+    return Right(result);
+  } catch (e) {
+    return Left(Failure(message: "Query failed: $e"));
   }
 }
