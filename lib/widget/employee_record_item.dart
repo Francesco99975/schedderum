@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:schedderum/models/display_record.dart';
 import 'package:schedderum/models/record.dart';
 import 'package:schedderum/providers/settings_provider.dart';
+import 'package:schedderum/util/formatters.dart';
 import 'package:schedderum/util/responsive.dart';
 
 class EmployeeRecordItem extends ConsumerWidget {
@@ -34,6 +35,7 @@ class EmployeeRecordItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activeTimeFormatter = ref.watch(activeDateFormatterProvider);
+    final settingsAsync = ref.watch(settingsProvider);
     final duration = displayRecord.record.duration;
     final borderColor =
         displayRecord.record.type == RecordType.SHIFT
@@ -89,30 +91,88 @@ class EmployeeRecordItem extends ConsumerWidget {
         return false;
       },
       background: Container(
-        color: Colors.redAccent,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        decoration: BoxDecoration(
+          color: Colors.redAccent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        padding: const EdgeInsets.only(left: 20),
         alignment: Alignment.centerLeft,
         child: const Icon(Icons.delete, color: Colors.white),
       ),
       child: Card(
+        elevation: 5.0,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: borderColor),
+          side: BorderSide(
+            color: borderColor,
+            width: 2,
+            style: BorderStyle.solid,
+          ),
           borderRadius: BorderRadius.circular(16),
         ),
         margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
         child: ListTile(
           onTap: () {}, //_openForm(context, displayRecord.record),
-          leading: CircleAvatar(
-            backgroundColor: Color(displayRecord.employeeColor),
-            child: Text(
-              _formatDuration(duration),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: getContrastingTextColor(
-                  Color(displayRecord.employeeColor),
+          leading: settingsAsync.when(
+            loading: () => const CircularProgressIndicator(),
+            error: (error, stackTrace) => const Icon(Icons.error),
+            data:
+                (settings) => CircleAvatar(
+                  backgroundColor: Color(displayRecord.employeeColor),
+                  child:
+                      displayRecord.record.type == RecordType.SHIFT
+                          ? Text(
+                            _formatDuration(
+                              regulatedDuration(
+                                duration,
+                                settings.breakFrequencyHours,
+                                settings.breakDurationHours,
+                              ),
+                            ),
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodySmall?.copyWith(
+                              color: getContrastingTextColor(
+                                Color(displayRecord.employeeColor),
+                              ),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                          : displayRecord.record.type == RecordType.SICK
+                          ? Icon(
+                            Icons.health_and_safety,
+                            color: getContrastingTextColor(
+                              Color(displayRecord.employeeColor),
+                            ),
+                          )
+                          : displayRecord.record.type == RecordType.VACATION
+                          ? Icon(
+                            Icons.work,
+                            color: getContrastingTextColor(
+                              Color(displayRecord.employeeColor),
+                            ),
+                          )
+                          : displayRecord.record.type == RecordType.UNAVAILABLE
+                          ? Icon(
+                            Icons.block,
+                            color: getContrastingTextColor(
+                              Color(displayRecord.employeeColor),
+                            ),
+                          )
+                          : displayRecord.record.type == RecordType.TIME_OFF
+                          ? Icon(
+                            Icons.chair,
+                            color: getContrastingTextColor(
+                              Color(displayRecord.employeeColor),
+                            ),
+                          )
+                          : Icon(
+                            Icons.person,
+                            color: getContrastingTextColor(
+                              Color(displayRecord.employeeColor),
+                            ),
+                          ),
                 ),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
           ),
           title: Text(
             displayRecord.employeeFullName,
@@ -124,6 +184,7 @@ class EmployeeRecordItem extends ConsumerWidget {
             _determineRecordType(
               displayRecord.record.type,
               activeTimeFormatter,
+              displayRecord.record.isAllDay(),
             ),
             style: Theme.of(
               context,
@@ -134,16 +195,26 @@ class EmployeeRecordItem extends ConsumerWidget {
     );
   }
 
-  String _determineRecordType(RecordType type, DateFormat activeTimeFormatter) {
+  String _determineRecordType(
+    RecordType type,
+    DateFormat activeTimeFormatter,
+    bool allDay,
+  ) {
     switch (type) {
       case RecordType.SHIFT:
         return "${activeTimeFormatter.format(displayRecord.record.start)} - ${activeTimeFormatter.format(displayRecord.record.end)}";
       case RecordType.SICK:
         return "Sick";
       case RecordType.UNAVAILABLE:
-        return "Unavailable";
+        if (allDay) {
+          return "Unavailable";
+        } else {
+          return "Unavailable from: ${activeTimeFormatter.format(displayRecord.record.start)} to: ${activeTimeFormatter.format(displayRecord.record.end)}";
+        }
       case RecordType.VACATION:
         return "Vacation";
+      case RecordType.TIME_OFF:
+        return "Time Off";
     }
   }
 }

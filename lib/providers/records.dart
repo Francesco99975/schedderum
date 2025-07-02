@@ -1,9 +1,13 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:schedderum/helpers/failure.dart';
 import 'package:schedderum/extensions/database.dart';
 import 'package:schedderum/models/display_record.dart';
 import 'package:schedderum/database/database.dart' as db;
+import 'package:schedderum/models/record.dart';
+import 'package:schedderum/providers/settings_provider.dart';
+import 'package:schedderum/util/formatters.dart';
 import 'database.dart';
 
 part 'records.g.dart';
@@ -65,7 +69,6 @@ class Records extends _$Records {
     try {
       final dao = ref.read(databaseProvider).recordDao;
       await dao.insertRecord(r);
-
       final updated = await _fetchRecords(departmentId, weekStart, weekEnd);
       state = AsyncValue.data(updated);
       return Right(r);
@@ -107,4 +110,39 @@ class Records extends _$Records {
       return Left(Failure(message: "Delete failed: $e"));
     }
   }
+}
+
+@riverpod
+Option<Duration> currentDepartmentWeekHours(
+  Ref ref,
+  String departmentId,
+  DateTime weekStart,
+  DateTime weekEnd,
+) {
+  final result = ref.watch(recordsProvider(departmentId, weekStart, weekEnd));
+  final settingsAsync = ref.watch(settingsProvider);
+
+  return settingsAsync.maybeWhen(
+    data:
+        (settings) => result.maybeWhen(
+          data:
+              (either) => either.match((failure) => none(), (records) {
+                final total = records.fold<Duration>(
+                  Duration.zero,
+                  (prev, r) =>
+                      r.record.type == RecordType.SHIFT
+                          ? prev +
+                              regulatedDuration(
+                                r.record.duration,
+                                settings.breakFrequencyHours,
+                                settings.breakDurationHours,
+                              )
+                          : prev,
+                );
+                return Some(total);
+              }),
+          orElse: () => none(),
+        ),
+    orElse: () => none(),
+  );
 }

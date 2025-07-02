@@ -46,8 +46,6 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
             weekEnd,
           ).future,
       render: (records) {
-        //Filtering records
-
         return Scaffold(
           body: Column(
             children: [
@@ -70,6 +68,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                   itemBuilder:
                       (context, index) => DayRecordCard(
                         date: weekDays[index],
+                        currentDepartmentId: widget.currentDepartment.id,
                         records:
                             records
                                 .where(

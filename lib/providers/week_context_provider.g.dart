@@ -6,7 +6,7 @@ part of 'week_context_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$weekContextHash() => r'1ce2f71c9d0c3f29d58449a839ff3d8cddcfe8de';
+String _$weekContextHash() => r'effa2c964e8022ca4330127f3345380c156aa239';
 
 /// See also [WeekContext].
 @ProviderFor(WeekContext)

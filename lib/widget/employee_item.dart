@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:schedderum/models/employee.dart';
+import 'package:schedderum/providers/settings_provider.dart';
+import 'package:schedderum/util/formatters.dart';
 import 'package:schedderum/util/responsive.dart';
 import 'package:schedderum/widget/employee_form_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class EmployeeItem extends StatelessWidget {
+class EmployeeItem extends ConsumerWidget {
   final Employee employee;
   final DateTime from;
   final DateTime to;
@@ -58,7 +61,8 @@ class EmployeeItem extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settingsAsync = ref.watch(settingsProvider);
     final duration = employee.getRangedDuration(from, to);
     final shiftCount = employee.weekStatus(from, to);
     final color = Color(employee.color);
@@ -126,15 +130,26 @@ class EmployeeItem extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
         child: ListTile(
           onTap: () => _openForm(currentDepartmentId, context, employee),
-          leading: CircleAvatar(
-            backgroundColor: color,
-            child: Text(
-              _formatDuration(duration),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: getContrastingTextColor(color),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          leading: settingsAsync.when(
+            loading: () => const CircularProgressIndicator(),
+            error: (error, stackTrace) => const Icon(Icons.error),
+            data:
+                (settings) => CircleAvatar(
+                  backgroundColor: color,
+                  child: Text(
+                    _formatDuration(
+                      regulatedDuration(
+                        duration,
+                        settings.breakFrequencyHours,
+                        settings.breakDurationHours,
+                      ),
+                    ),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: getContrastingTextColor(color),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
           ),
           title: Text(
             employee.getFullName(),

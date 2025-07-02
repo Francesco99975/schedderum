@@ -4,7 +4,7 @@ part 'record.freezed.dart';
 part 'record.g.dart'; // for JSON serialization
 
 // ignore: constant_identifier_names
-enum RecordType { SHIFT, SICK, UNAVAILABLE, VACATION }
+enum RecordType { SHIFT, SICK, UNAVAILABLE, VACATION, TIME_OFF }
 
 @freezed
 @JsonSerializable()
@@ -39,4 +39,10 @@ class Record with _$Record {
     type: type.toString(),
     employeeId: empId,
   );
+
+  bool isAllDay() =>
+      start.hour == 0 &&
+      start.minute == 0 &&
+      end.hour == 23 &&
+      end.minute == 59;
 }

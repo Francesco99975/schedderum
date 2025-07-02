@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:schedderum/models/department.dart';
 import 'package:schedderum/providers/departments.dart';
+import 'package:schedderum/providers/records.dart';
 import 'package:schedderum/providers/week_context_provider.dart';
 import 'package:schedderum/util/formatters.dart';
 import 'package:schedderum/widget/async_provider_replacer.dart';
@@ -22,7 +24,15 @@ class AppHeaderBarSliver extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final weekController = ref.read(weekContextProvider.notifier);
     final weekEnd = endOfWeek(weekStart);
-    final duration = selectedDepartment.getRangedDuration(weekStart, weekEnd);
+    final duration = ref
+        .watch(
+          currentDepartmentWeekHoursProvider(
+            selectedDepartment.id,
+            weekStart,
+            weekEnd,
+          ),
+        )
+        .getOrElse(() => Duration.zero);
 
     return SliverToBoxAdapter(
       child: Padding(

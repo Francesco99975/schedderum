@@ -5,11 +5,15 @@ part 'week_context_provider.g.dart';
 
 const _kCurrentWeekKey = 'current_week_start';
 
-DateTime _startOfWeek(DateTime date) =>
-    date.subtract(Duration(days: date.weekday - DateTime.monday));
+DateTime startOfWeek(DateTime date) {
+  final base = date.subtract(Duration(days: date.weekday - DateTime.monday));
+  return DateTime(base.year, base.month, base.day); // zeroed time
+}
 
-DateTime endOfWeek(DateTime date) =>
-    _startOfWeek(date).add(const Duration(days: 6));
+DateTime endOfWeek(DateTime date) {
+  final base = startOfWeek(date).add(const Duration(days: 6));
+  return DateTime(base.year, base.month, base.day); // zeroed time
+}
 
 @riverpod
 class WeekContext extends _$WeekContext {
@@ -20,10 +24,10 @@ class WeekContext extends _$WeekContext {
 
     if (saved != null) {
       final parsed = DateTime.tryParse(saved);
-      if (parsed != null) return _startOfWeek(parsed);
+      if (parsed != null) return startOfWeek(parsed);
     }
 
-    return _startOfWeek(DateTime.now());
+    return startOfWeek(DateTime.now());
   }
 
   Future<void> _persist(DateTime weekStart) async {
@@ -32,7 +36,7 @@ class WeekContext extends _$WeekContext {
   }
 
   Future<void> setWeek(DateTime anyDayInWeek) async {
-    final newStart = _startOfWeek(anyDayInWeek);
+    final newStart = startOfWeek(anyDayInWeek);
     if (state.valueOrNull == newStart) return;
     state = AsyncValue.data(newStart);
     await _persist(newStart);
@@ -53,7 +57,7 @@ class WeekContext extends _$WeekContext {
   }
 
   bool get isCurrentWeek {
-    final current = _startOfWeek(DateTime.now());
+    final current = startOfWeek(DateTime.now());
     return state.valueOrNull == current;
   }
 }

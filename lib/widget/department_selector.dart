@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:schedderum/helpers/uuid.dart';
 import 'package:schedderum/models/department.dart';
 import 'package:schedderum/providers/departments.dart';
-import 'package:schedderum/util/formatters.dart';
 
 class DepartmentPopupMenu extends ConsumerStatefulWidget {
   const DepartmentPopupMenu({super.key});
@@ -158,7 +157,7 @@ class _DepartmentPopupMenuState extends ConsumerState<DepartmentPopupMenu> {
                     (opt) => opt.fold(
                       () => const Text('No department selected'),
                       (selected) => Text(
-                        '${selected.name} (${formatDuration(selected.getRangedDuration(DateTime.now(), DateTime.now().add(Duration(days: 7))))})',
+                        selected.name,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodyMedium,
                       ),
@@ -247,7 +246,7 @@ class _DepartmentRowState extends State<DepartmentRow> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Text(
-                          '${widget.dept.name} (${formatDuration(widget.dept.getRangedDuration(DateTime.now(), DateTime.now().add(Duration(days: 7))))})',
+                          widget.dept.name,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight:
                                 widget.isSelected ? FontWeight.bold : null,
