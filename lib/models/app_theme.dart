@@ -14,37 +14,52 @@ class AppTheme {
         "buttonTheme": {
           "alignedDropdown": false,
           "colorScheme": {
-            "background": "#ff25002a",
             "brightness": "dark",
             "error": "#ffffb4ab",
             "errorContainer": "#ff93000a",
-            "inversePrimary": "#ff006a60",
-            "inverseSurface": "#ffe0e3e1",
-            "onBackground": "#fffff7fb",
+            "inversePrimary": "#ff775a0b",
+            "inverseSurface": "#ffd4c0d8",
             "onError": "#ff690005",
-            "onErrorContainer": "#ffffb4ab",
-            "onInverseSurface": "#ff2d3130",
-            "onPrimary": "#ff003731",
-            "onPrimaryContainer": "#ff92f4e5",
-            "onSecondary": "#ff1c3531",
-            "onSecondaryContainer": "#ffcce8e2",
-            "onSurface": "#fffff7f9",
-            "onSurfaceVariant": "#ffbec9c6",
-            "onTertiary": "#ff153349",
-            "onTertiaryContainer": "#ffcce5ff",
-            "outline": "#ff899390",
-            "outlineVariant": "#ff3f4947",
-            "primary": "#ff53dbc9",
-            "primaryContainer": "#ff005048",
+            "onErrorContainer": "#ffffdad6",
+            "onInverseSurface": "#ff353027",
+            "onPrimaryFixed": "#ff261a00",
+            "onPrimary": "#ff3f2e00",
+            "onPrimaryContainer": "#ffffdf9e",
+            "onPrimaryFixedVariant": "#ff5b4300",
+            "onSecondary": "#ffffffff",
+            "onSecondaryContainer": "#ff00201f",
+            "onSecondaryFixed": "#ff241a04",
+            "onSecondaryFixedVariant": "#ff52452a",
+            "onSurface": "#ff55dcb9",
+            "onSurfaceVariant": "#ffc18a35",
+            "onTertiary": "#ff1d361c",
+            "onTertiaryContainer": "#ffccebc4",
+            "onTertiaryFixed": "#ff072109",
+            "onTertiaryFixedVariant": "#ff334d31",
+            "outline": "#ff998f80",
+            "outlineVariant": "#ff4d4639",
+            "primary": "#ffe9c16c",
+            "primaryContainer": "#ff5b4300",
+            "primaryFixed": "#ffffdf9e",
+            "primaryFixedDim": "#ffe9c16c",
             "scrim": "#ff000000",
-            "secondary": "#ffb1ccc6",
-            "secondaryContainer": "#ff334b47",
+            "secondary": "#ff38bdbb",
+            "secondaryContainer": "#ff6ff7f4",
+            "surfaceBright": "#ff3e382f",
+            "surfaceContainer": "#ff231f17",
+            "surfaceContainerHigh": "#ff2e2921",
+            "surfaceContainerHighest": "#ff39342b",
+            "secondaryFixed": "#fff5e0bb",
+            "secondaryFixedDim": "#ffd8c4a0",
             "shadow": "#ff000000",
-            "surface": "#ff390036",
-            "surfaceTint": "#ff53dbc9",
-            "surfaceVariant": "#ff3f4947",
-            "tertiary": "#ffadcae6",
-            "tertiaryContainer": "#ff2d4961",
+            "surface": "#ff001501",
+            "surfaceContainerLow": "#ff1f1b13",
+            "surfaceContainerLowest": "#ff110e07",
+            "surfaceDim": "#ff17130b",
+            "tertiary": "#ffb0cfaa",
+            "tertiaryContainer": "#ff334d31",
+            "tertiaryFixed": "#ffccebc4",
+            "tertiaryFixedDim": "#ffb0cfaa",
           },
           "height": 36,
           "layoutBehavior": "padded",
@@ -68,50 +83,63 @@ class AppTheme {
           },
           "textTheme": "normal",
         },
-        "canvasColor": "#ff25002a",
-        "cardColor": "#ff390036",
+        "canvasColor": "#ff001501",
+        "cardColor": "#ff001501",
         "colorScheme": {
-          "background": "#ff25002a",
           "brightness": "dark",
           "error": "#ffffb4ab",
           "errorContainer": "#ff93000a",
-          "inversePrimary": "#ff006a60",
-          "inverseSurface": "#ffe0e3e1",
-          "onBackground": "#fffff7fb",
+          "inversePrimary": "#ff775a0b",
+          "inverseSurface": "#ffd4c0d8",
           "onError": "#ff690005",
-          "onErrorContainer": "#ffffb4ab",
-          "onInverseSurface": "#ff2d3130",
-          "onPrimary": "#ff003731",
-          "onPrimaryContainer": "#ff92f4e5",
-          "onSecondary": "#ff1c3531",
-          "onSecondaryContainer": "#ffcce8e2",
-          "onSurface": "#fffff7f9",
-          "onSurfaceVariant": "#ffbec9c6",
-          "onTertiary": "#ff153349",
-          "onTertiaryContainer": "#ffcce5ff",
-          "outline": "#ff899390",
-          "outlineVariant": "#ff3f4947",
-          "primary": "#ff53dbc9",
-          "primaryContainer": "#ff005048",
+          "onErrorContainer": "#ffffdad6",
+          "onInverseSurface": "#ff353027",
+          "onPrimaryFixed": "#ff261a00",
+          "onPrimary": "#ff3f2e00",
+          "onPrimaryContainer": "#ffffdf9e",
+          "onPrimaryFixedVariant": "#ff5b4300",
+          "onSecondary": "#ffffffff",
+          "onSecondaryContainer": "#ff00201f",
+          "onSecondaryFixed": "#ff241a04",
+          "onSecondaryFixedVariant": "#ff52452a",
+          "onSurface": "#ff55dcb9",
+          "onSurfaceVariant": "#ffc18a35",
+          "onTertiary": "#ff1d361c",
+          "onTertiaryContainer": "#ffccebc4",
+          "onTertiaryFixed": "#ff072109",
+          "onTertiaryFixedVariant": "#ff334d31",
+          "outline": "#ff998f80",
+          "outlineVariant": "#ff4d4639",
+          "primary": "#ffe9c16c",
+          "primaryContainer": "#ff5b4300",
+          "primaryFixed": "#ffffdf9e",
+          "primaryFixedDim": "#ffe9c16c",
           "scrim": "#ff000000",
-          "secondary": "#ffb1ccc6",
-          "secondaryContainer": "#ff334b47",
+          "secondary": "#ff38bdbb",
+          "secondaryContainer": "#ff6ff7f4",
+          "surfaceBright": "#ff3e382f",
+          "surfaceContainer": "#ff231f17",
+          "surfaceContainerHigh": "#ff2e2921",
+          "surfaceContainerHighest": "#ff39342b",
+          "secondaryFixed": "#fff5e0bb",
+          "secondaryFixedDim": "#ffd8c4a0",
           "shadow": "#ff000000",
-          "surface": "#ff390036",
-          "surfaceTint": "#ff53dbc9",
-          "surfaceVariant": "#ff3f4947",
-          "tertiary": "#ffadcae6",
-          "tertiaryContainer": "#ff2d4961",
+          "surface": "#ff001501",
+          "surfaceContainerLow": "#ff1f1b13",
+          "surfaceContainerLowest": "#ff110e07",
+          "surfaceDim": "#ff17130b",
+          "tertiary": "#ffb0cfaa",
+          "tertiaryContainer": "#ff334d31",
+          "tertiaryFixed": "#ffccebc4",
+          "tertiaryFixedDim": "#ffb0cfaa",
         },
-        "dialogBackgroundColor": "#ff25002a",
         "disabledColor": "#62ffffff",
-        "dividerColor": "#1ffff7f9",
+        "dividerColor": "#1f55dcb9",
         "focusColor": "#1fffffff",
         "highlightColor": "#40cccccc",
         "hintColor": "#99ffffff",
         "hoverColor": "#0affffff",
         "iconTheme": {"color": "#ffffffff"},
-        "indicatorColor": "#fffff7f9",
         "inputDecorationTheme": {
           "alignLabelWithHint": false,
           "filled": false,
@@ -122,15 +150,15 @@ class AppTheme {
         },
         "materialTapTargetSize": "shrinkWrap",
         "platform": "linux",
-        "primaryColor": "#ff390036",
+        "primaryColor": "#ff001501",
         "primaryColorDark": "#ff000000",
         "primaryColorLight": "#ff9e9e9e",
         "primaryIconTheme": {"color": "#ffffffff"},
         "primaryTextTheme": {
           "bodyLarge": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -146,9 +174,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "bodyMedium": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -164,9 +192,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "bodySmall": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -182,9 +210,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displayLarge": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -200,9 +228,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displayMedium": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -218,9 +246,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displaySmall": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -236,9 +264,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineLarge": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -254,9 +282,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineMedium": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -272,9 +300,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineSmall": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -290,9 +318,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelLarge": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -308,9 +336,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelMedium": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -326,9 +354,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelSmall": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -344,9 +372,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleLarge": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -362,9 +390,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleMedium": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -380,9 +408,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleSmall": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -398,16 +426,16 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
         },
-        "scaffoldBackgroundColor": "#ff25002a",
+        "scaffoldBackgroundColor": "#ff001501",
         "secondaryHeaderColor": "#ff616161",
         "shadowColor": "#ff000000",
         "splashColor": "#40cccccc",
         "splashFactory": "ripple",
         "textTheme": {
           "bodyLarge": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -423,9 +451,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "bodyMedium": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -441,9 +469,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "bodySmall": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -459,9 +487,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displayLarge": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -477,9 +505,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displayMedium": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -495,9 +523,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displaySmall": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -513,9 +541,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineLarge": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -531,9 +559,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineMedium": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -549,9 +577,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineSmall": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -567,9 +595,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelLarge": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -585,9 +613,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelMedium": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -603,9 +631,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelSmall": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -621,9 +649,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleLarge": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -639,9 +667,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleMedium": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -657,9 +685,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleSmall": {
-            "color": "#fffff7f9",
+            "color": "#ff55dcb9",
             "decoration": "none",
-            "decorationColor": "#fffff7f9",
+            "decorationColor": "#ff55dcb9",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -678,9 +706,9 @@ class AppTheme {
         "typography": {
           "black": {
             "bodyLarge": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -692,9 +720,9 @@ class AppTheme {
               "inherit": true,
             },
             "bodyMedium": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -706,9 +734,9 @@ class AppTheme {
               "inherit": true,
             },
             "bodySmall": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -720,9 +748,9 @@ class AppTheme {
               "inherit": true,
             },
             "displayLarge": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -734,9 +762,9 @@ class AppTheme {
               "inherit": true,
             },
             "displayMedium": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -748,9 +776,9 @@ class AppTheme {
               "inherit": true,
             },
             "displaySmall": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -762,9 +790,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineLarge": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -776,9 +804,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineMedium": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -790,9 +818,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineSmall": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -804,9 +832,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelLarge": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -818,9 +846,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelMedium": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -832,9 +860,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelSmall": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -846,9 +874,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleLarge": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -860,9 +888,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleMedium": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -874,9 +902,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleSmall": {
-              "color": "#ff390036",
+              "color": "#ff001501",
               "decoration": "none",
-              "decorationColor": "#ff390036",
+              "decorationColor": "#ff001501",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1301,9 +1329,9 @@ class AppTheme {
           },
           "white": {
             "bodyLarge": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1315,9 +1343,9 @@ class AppTheme {
               "inherit": true,
             },
             "bodyMedium": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1329,9 +1357,9 @@ class AppTheme {
               "inherit": true,
             },
             "bodySmall": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1343,9 +1371,9 @@ class AppTheme {
               "inherit": true,
             },
             "displayLarge": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1357,9 +1385,9 @@ class AppTheme {
               "inherit": true,
             },
             "displayMedium": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1371,9 +1399,9 @@ class AppTheme {
               "inherit": true,
             },
             "displaySmall": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1385,9 +1413,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineLarge": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1399,9 +1427,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineMedium": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1413,9 +1441,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineSmall": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1427,9 +1455,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelLarge": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1441,9 +1469,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelMedium": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1455,9 +1483,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelSmall": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1469,9 +1497,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleLarge": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1483,9 +1511,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleMedium": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1497,9 +1525,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleSmall": {
-              "color": "#fffff7f9",
+              "color": "#ff55dcb9",
               "decoration": "none",
-              "decorationColor": "#fffff7f9",
+              "decorationColor": "#ff55dcb9",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -1524,37 +1552,52 @@ class AppTheme {
         "buttonTheme": {
           "alignedDropdown": false,
           "colorScheme": {
-            "background": "#fffdfcff",
             "brightness": "light",
             "error": "#ffba1a1a",
             "errorContainer": "#ffffdad6",
-            "inversePrimary": "#ff53dbc9",
-            "inverseSurface": "#ff2d3130",
-            "onBackground": "#ff260026",
+            "inversePrimary": "#ffd4c871",
+            "inverseSurface": "#ff323027",
             "onError": "#ffffffff",
             "onErrorContainer": "#ff410002",
-            "onInverseSurface": "#ffeff1ef",
+            "onInverseSurface": "#fff6f0e3",
+            "onPrimaryFixed": "#ff201c00",
             "onPrimary": "#ffffffff",
-            "onPrimaryContainer": "#ff00201c",
+            "onPrimaryContainer": "#ff201c00",
+            "onPrimaryFixedVariant": "#ff4f4800",
             "onSecondary": "#ffffffff",
-            "onSecondaryContainer": "#ff05201c",
-            "onSurface": "#ff58124b",
-            "onSurfaceVariant": "#ff3f4947",
+            "onSecondaryContainer": "#ff002111",
+            "onSecondaryFixed": "#ff1f1c05",
+            "onSecondaryFixedVariant": "#ff4b472b",
+            "onSurface": "#ff1d1c13",
+            "onSurfaceVariant": "#ff4a473a",
             "onTertiary": "#ffffffff",
-            "onTertiaryContainer": "#ff001e31",
-            "outline": "#ff6f7977",
-            "outlineVariant": "#ffbec9c6",
-            "primary": "#ff006a60",
-            "primaryContainer": "#ff92f4e5",
+            "onTertiaryContainer": "#ff002113",
+            "onTertiaryFixed": "#ff002113",
+            "onTertiaryFixedVariant": "#ff294e3b",
+            "outline": "#ff7b7768",
+            "outlineVariant": "#ffcbc6b5",
+            "primary": "#ff685f12",
+            "primaryContainer": "#fff1e48a",
+            "primaryFixed": "#fff1e48a",
+            "primaryFixedDim": "#ffd4c871",
             "scrim": "#ff000000",
-            "secondary": "#ff4a635f",
-            "secondaryContainer": "#ffcce8e2",
+            "secondary": "#ff273d2f",
+            "secondaryContainer": "#ff93f7bb",
+            "surfaceBright": "#fffff9eb",
+            "surfaceContainer": "#fff3eee0",
+            "surfaceContainerHigh": "#ffede8da",
+            "surfaceContainerHighest": "#ffe7e2d5",
+            "secondaryFixed": "#ffebe3bd",
+            "secondaryFixedDim": "#ffcec7a3",
             "shadow": "#ff000000",
-            "surface": "#fffdfbff",
-            "surfaceTint": "#ff006a60",
-            "surfaceVariant": "#ffdae5e1",
-            "tertiary": "#ff456179",
-            "tertiaryContainer": "#ffcce5ff",
+            "surface": "#fffff9eb",
+            "surfaceContainerLow": "#fff9f3e5",
+            "surfaceContainerLowest": "#ffffffff",
+            "surfaceDim": "#ffdfdacc",
+            "tertiary": "#ff406652",
+            "tertiaryContainer": "#ffc2ecd3",
+            "tertiaryFixed": "#ffc2ecd3",
+            "tertiaryFixedDim": "#ffa7d0b7",
           },
           "height": 36,
           "layoutBehavior": "padded",
@@ -1578,50 +1621,63 @@ class AppTheme {
           },
           "textTheme": "normal",
         },
-        "canvasColor": "#fffdfcff",
-        "cardColor": "#fffdfbff",
+        "canvasColor": "#fffff9eb",
+        "cardColor": "#fffff9eb",
         "colorScheme": {
-          "background": "#fffdfcff",
           "brightness": "light",
           "error": "#ffba1a1a",
           "errorContainer": "#ffffdad6",
-          "inversePrimary": "#ff53dbc9",
-          "inverseSurface": "#ff2d3130",
-          "onBackground": "#ff260026",
+          "inversePrimary": "#ffd4c871",
+          "inverseSurface": "#ff323027",
           "onError": "#ffffffff",
           "onErrorContainer": "#ff410002",
-          "onInverseSurface": "#ffeff1ef",
+          "onInverseSurface": "#fff6f0e3",
+          "onPrimaryFixed": "#ff201c00",
           "onPrimary": "#ffffffff",
-          "onPrimaryContainer": "#ff00201c",
+          "onPrimaryContainer": "#ff201c00",
+          "onPrimaryFixedVariant": "#ff4f4800",
           "onSecondary": "#ffffffff",
-          "onSecondaryContainer": "#ff05201c",
-          "onSurface": "#ff58124b",
-          "onSurfaceVariant": "#ff3f4947",
+          "onSecondaryContainer": "#ff002111",
+          "onSecondaryFixed": "#ff1f1c05",
+          "onSecondaryFixedVariant": "#ff4b472b",
+          "onSurface": "#ff1d1c13",
+          "onSurfaceVariant": "#ff4a473a",
           "onTertiary": "#ffffffff",
-          "onTertiaryContainer": "#ff001e31",
-          "outline": "#ff6f7977",
-          "outlineVariant": "#ffbec9c6",
-          "primary": "#ff006a60",
-          "primaryContainer": "#ff92f4e5",
+          "onTertiaryContainer": "#ff002113",
+          "onTertiaryFixed": "#ff002113",
+          "onTertiaryFixedVariant": "#ff294e3b",
+          "outline": "#ff7b7768",
+          "outlineVariant": "#ffcbc6b5",
+          "primary": "#ff685f12",
+          "primaryContainer": "#fff1e48a",
+          "primaryFixed": "#fff1e48a",
+          "primaryFixedDim": "#ffd4c871",
           "scrim": "#ff000000",
-          "secondary": "#ff4a635f",
-          "secondaryContainer": "#ffcce8e2",
+          "secondary": "#ff273d2f",
+          "secondaryContainer": "#ff93f7bb",
+          "surfaceBright": "#fffff9eb",
+          "surfaceContainer": "#fff3eee0",
+          "surfaceContainerHigh": "#ffede8da",
+          "surfaceContainerHighest": "#ffe7e2d5",
+          "secondaryFixed": "#ffebe3bd",
+          "secondaryFixedDim": "#ffcec7a3",
           "shadow": "#ff000000",
-          "surface": "#fffdfbff",
-          "surfaceTint": "#ff006a60",
-          "surfaceVariant": "#ffdae5e1",
-          "tertiary": "#ff456179",
-          "tertiaryContainer": "#ffcce5ff",
+          "surface": "#fffff9eb",
+          "surfaceContainerLow": "#fff9f3e5",
+          "surfaceContainerLowest": "#ffffffff",
+          "surfaceDim": "#ffdfdacc",
+          "tertiary": "#ff406652",
+          "tertiaryContainer": "#ffc2ecd3",
+          "tertiaryFixed": "#ffc2ecd3",
+          "tertiaryFixedDim": "#ffa7d0b7",
         },
-        "dialogBackgroundColor": "#fffdfcff",
         "disabledColor": "#61000000",
-        "dividerColor": "#1f58124b",
+        "dividerColor": "#1f1d1c13",
         "focusColor": "#1f000000",
         "highlightColor": "#66bcbcbc",
         "hintColor": "#99000000",
         "hoverColor": "#0a000000",
         "iconTheme": {"color": "#dd000000"},
-        "indicatorColor": "#ffffffff",
         "inputDecorationTheme": {
           "alignLabelWithHint": false,
           "filled": false,
@@ -1632,15 +1688,15 @@ class AppTheme {
         },
         "materialTapTargetSize": "shrinkWrap",
         "platform": "linux",
-        "primaryColor": "#ff006a60",
+        "primaryColor": "#ff685f12",
         "primaryColorDark": "#ff1976d2",
         "primaryColorLight": "#ffbbdefb",
         "primaryIconTheme": {"color": "#ffffffff"},
         "primaryTextTheme": {
           "bodyLarge": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1656,9 +1712,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "bodyMedium": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1674,9 +1730,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "bodySmall": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1692,9 +1748,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displayLarge": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1710,9 +1766,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displayMedium": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1728,9 +1784,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displaySmall": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1746,9 +1802,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineLarge": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1764,9 +1820,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineMedium": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1782,9 +1838,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineSmall": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1800,9 +1856,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelLarge": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1818,9 +1874,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelMedium": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1836,9 +1892,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelSmall": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1854,9 +1910,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleLarge": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1872,9 +1928,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleMedium": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1890,9 +1946,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleSmall": {
-            "color": "#fffdfbff",
+            "color": "#fffff9eb",
             "decoration": "none",
-            "decorationColor": "#fffdfbff",
+            "decorationColor": "#fffff9eb",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1908,16 +1964,16 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
         },
-        "scaffoldBackgroundColor": "#fffdfcff",
+        "scaffoldBackgroundColor": "#fffff9eb",
         "secondaryHeaderColor": "#ffe3f2fd",
         "shadowColor": "#ff000000",
         "splashColor": "#66c8c8c8",
         "splashFactory": "ripple",
         "textTheme": {
           "bodyLarge": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1933,9 +1989,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "bodyMedium": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1951,9 +2007,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "bodySmall": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1969,9 +2025,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displayLarge": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -1987,9 +2043,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displayMedium": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -2005,9 +2061,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "displaySmall": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -2023,9 +2079,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineLarge": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -2041,9 +2097,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineMedium": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -2059,9 +2115,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "headlineSmall": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -2077,9 +2133,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelLarge": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -2095,9 +2151,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelMedium": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -2113,9 +2169,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "labelSmall": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -2131,9 +2187,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleLarge": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -2149,9 +2205,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleMedium": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -2167,9 +2223,9 @@ class AppTheme {
             "textBaseline": "alphabetic",
           },
           "titleSmall": {
-            "color": "#ff58124b",
+            "color": "#ff1d1c13",
             "decoration": "none",
-            "decorationColor": "#ff58124b",
+            "decorationColor": "#ff1d1c13",
             "fontFamily": "Roboto",
             "fontFamilyFallback": [
               "Ubuntu",
@@ -2188,9 +2244,9 @@ class AppTheme {
         "typography": {
           "black": {
             "bodyLarge": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2202,9 +2258,9 @@ class AppTheme {
               "inherit": true,
             },
             "bodyMedium": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2216,9 +2272,9 @@ class AppTheme {
               "inherit": true,
             },
             "bodySmall": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2230,9 +2286,9 @@ class AppTheme {
               "inherit": true,
             },
             "displayLarge": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2244,9 +2300,9 @@ class AppTheme {
               "inherit": true,
             },
             "displayMedium": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2258,9 +2314,9 @@ class AppTheme {
               "inherit": true,
             },
             "displaySmall": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2272,9 +2328,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineLarge": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2286,9 +2342,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineMedium": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2300,9 +2356,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineSmall": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2314,9 +2370,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelLarge": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2328,9 +2384,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelMedium": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2342,9 +2398,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelSmall": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2356,9 +2412,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleLarge": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2370,9 +2426,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleMedium": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2384,9 +2440,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleSmall": {
-              "color": "#ff58124b",
+              "color": "#ff1d1c13",
               "decoration": "none",
-              "decorationColor": "#ff58124b",
+              "decorationColor": "#ff1d1c13",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2811,9 +2867,9 @@ class AppTheme {
           },
           "white": {
             "bodyLarge": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2825,9 +2881,9 @@ class AppTheme {
               "inherit": true,
             },
             "bodyMedium": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2839,9 +2895,9 @@ class AppTheme {
               "inherit": true,
             },
             "bodySmall": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2853,9 +2909,9 @@ class AppTheme {
               "inherit": true,
             },
             "displayLarge": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2867,9 +2923,9 @@ class AppTheme {
               "inherit": true,
             },
             "displayMedium": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2881,9 +2937,9 @@ class AppTheme {
               "inherit": true,
             },
             "displaySmall": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2895,9 +2951,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineLarge": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2909,9 +2965,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineMedium": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2923,9 +2979,9 @@ class AppTheme {
               "inherit": true,
             },
             "headlineSmall": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2937,9 +2993,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelLarge": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2951,9 +3007,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelMedium": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2965,9 +3021,9 @@ class AppTheme {
               "inherit": true,
             },
             "labelSmall": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2979,9 +3035,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleLarge": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -2993,9 +3049,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleMedium": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",
@@ -3007,9 +3063,9 @@ class AppTheme {
               "inherit": true,
             },
             "titleSmall": {
-              "color": "#fffdfbff",
+              "color": "#fffff9eb",
               "decoration": "none",
-              "decorationColor": "#fffdfbff",
+              "decorationColor": "#fffff9eb",
               "fontFamily": "Roboto",
               "fontFamilyFallback": [
                 "Ubuntu",

@@ -226,7 +226,11 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                     FloatingActionButton.small(
                       heroTag: 'pdf',
                       tooltip: 'Export to PDF',
-                      child: const Icon(Icons.picture_as_pdf),
+                      backgroundColor: Colors.redAccent,
+                      child: const Icon(
+                        Icons.picture_as_pdf,
+                        color: Colors.white,
+                      ),
                       onPressed: () async {
                         _fabKey.currentState?.toggle();
                         showLoadingDialog(context);
@@ -258,7 +262,11 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                     FloatingActionButton.small(
                       heroTag: 'csv',
                       tooltip: 'Export to CSV',
-                      child: const Icon(Icons.file_copy_sharp),
+                      backgroundColor: Colors.greenAccent,
+                      child: const Icon(
+                        Icons.file_copy_sharp,
+                        color: Colors.white,
+                      ),
                       onPressed: () async {
                         _fabKey.currentState?.toggle();
                         showLoadingDialog(context);
