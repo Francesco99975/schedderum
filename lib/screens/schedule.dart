@@ -73,6 +73,7 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
     final activeTimeFormatter = ref.watch(activeDateFormatterProvider);
     final weekStart = widget.weekStart;
     final weekEnd = endOfWeek(weekStart);
+    final settingsAsync = ref.watch(settingsProvider);
 
     final List<DateTime> weekDays = [
       for (int i = 0; i < 7; i++) weekStart.add(Duration(days: i)),
@@ -190,86 +191,94 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
             ],
           ),
           floatingActionButtonLocation: ExpandableFab.location,
-          floatingActionButton: ExpandableFab(
-            key: _fabKey,
-            overlayStyle: ExpandableFabOverlayStyle(
-              color: Colors.black.withValues(alpha: 0.5),
-              blur: 3,
-            ),
-            openButtonBuilder: RotateFloatingActionButtonBuilder(
-              child: const Icon(Icons.add),
-              foregroundColor: Colors.white,
-              backgroundColor: Theme.of(context).primaryColor,
-              shape: const CircleBorder(),
-            ),
-            closeButtonBuilder: DefaultFloatingActionButtonBuilder(
-              child: const Icon(Icons.close),
-              foregroundColor: Colors.white,
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              shape: const CircleBorder(),
-            ),
-            children: [
-              FloatingActionButton.small(
-                heroTag: 'add',
-                tooltip: 'Add record',
-                child: const Icon(Icons.person_add),
-                onPressed: () {
-                  _fabKey.currentState?.toggle();
-                  context.push(
-                    "${AddExtensiveRecordFormScreen.routePath}?departmentId=${widget.currentDepartment.id}",
-                  );
-                },
-              ),
-              FloatingActionButton.small(
-                heroTag: 'pdf',
-                tooltip: 'Export to PDF',
-                child: const Icon(Icons.picture_as_pdf),
-                onPressed: () async {
-                  _fabKey.currentState?.toggle();
-                  showLoadingDialog(context);
+          floatingActionButton: settingsAsync.when(
+            data:
+                (settings) => ExpandableFab(
+                  key: _fabKey,
+                  overlayStyle: ExpandableFabOverlayStyle(
+                    color: Colors.black.withValues(alpha: 0.5),
+                    blur: 3,
+                  ),
+                  openButtonBuilder: RotateFloatingActionButtonBuilder(
+                    child: const Icon(Icons.add),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    shape: const CircleBorder(),
+                  ),
+                  closeButtonBuilder: DefaultFloatingActionButtonBuilder(
+                    child: const Icon(Icons.close),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    shape: const CircleBorder(),
+                  ),
+                  children: [
+                    FloatingActionButton.small(
+                      heroTag: 'add',
+                      tooltip: 'Add record',
+                      child: const Icon(Icons.person_add),
+                      onPressed: () {
+                        _fabKey.currentState?.toggle();
+                        context.push(
+                          "${AddExtensiveRecordFormScreen.routePath}?departmentId=${widget.currentDepartment.id}",
+                        );
+                      },
+                    ),
+                    FloatingActionButton.small(
+                      heroTag: 'pdf',
+                      tooltip: 'Export to PDF',
+                      child: const Icon(Icons.picture_as_pdf),
+                      onPressed: () async {
+                        _fabKey.currentState?.toggle();
+                        showLoadingDialog(context);
 
-                  final path = await generateSchedulePdf(
-                    currentDepartment: widget.currentDepartment,
-                    weekStart: weekStart,
-                    weekEnd: weekEnd,
-                    displayRecords:
-                        records
-                            .where((r) => r.record.type == RecordType.SHIFT)
-                            .toList(),
-                    weekDays: weekDays,
-                    timeFormatter: activeTimeFormatter,
-                  );
+                        final path = await generateSchedulePdf(
+                          currentDepartment: widget.currentDepartment,
+                          weekStart: weekStart,
+                          weekEnd: weekEnd,
+                          displayRecords:
+                              records
+                                  .where(
+                                    (r) => r.record.type == RecordType.SHIFT,
+                                  )
+                                  .toList(),
+                          weekDays: weekDays,
+                          timeFormatter: activeTimeFormatter,
+                          maxHours: settings.maxHours,
+                        );
 
-                  if (!context.mounted) return;
-                  Navigator.of(context, rootNavigator: true).pop();
+                        if (!context.mounted) return;
+                        Navigator.of(context, rootNavigator: true).pop();
 
-                  SnackBarService.showPositiveSnackBar(
-                    context: context,
-                    message: "PDF exported successfully on $path",
-                  );
-                },
-              ),
-              FloatingActionButton.small(
-                heroTag: 'csv',
-                tooltip: 'Export to CSV',
-                child: const Icon(Icons.file_copy_sharp),
-                onPressed: () async {
-                  _fabKey.currentState?.toggle();
-                  showLoadingDialog(context);
+                        SnackBarService.showPositiveSnackBar(
+                          context: context,
+                          message: "PDF exported successfully on $path",
+                        );
+                      },
+                    ),
+                    FloatingActionButton.small(
+                      heroTag: 'csv',
+                      tooltip: 'Export to CSV',
+                      child: const Icon(Icons.file_copy_sharp),
+                      onPressed: () async {
+                        _fabKey.currentState?.toggle();
+                        showLoadingDialog(context);
 
-                  // Simulate file generation delay
-                  await Future.delayed(const Duration(seconds: 2));
+                        // Simulate file generation delay
+                        await Future.delayed(const Duration(seconds: 2));
 
-                  if (!context.mounted) return;
-                  Navigator.of(context, rootNavigator: true).pop();
+                        if (!context.mounted) return;
+                        Navigator.of(context, rootNavigator: true).pop();
 
-                  SnackBarService.showPositiveSnackBar(
-                    context: context,
-                    message: "CSV exported successfully",
-                  );
-                },
-              ),
-            ],
+                        SnackBarService.showPositiveSnackBar(
+                          context: context,
+                          message: "CSV exported successfully",
+                        );
+                      },
+                    ),
+                  ],
+                ),
+            error: (_, _) => null,
+            loading: () => null,
           ),
         );
       },

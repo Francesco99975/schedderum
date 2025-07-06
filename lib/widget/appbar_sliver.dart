@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:schedderum/models/department.dart';
 import 'package:schedderum/providers/departments.dart';
 import 'package:schedderum/providers/records.dart';
+import 'package:schedderum/providers/settings_provider.dart';
 import 'package:schedderum/providers/week_context_provider.dart';
 import 'package:schedderum/util/formatters.dart';
 import 'package:schedderum/widget/async_provider_replacer.dart';
@@ -33,6 +34,8 @@ class AppHeaderBarSliver extends ConsumerWidget {
           ),
         )
         .getOrElse(() => Duration.zero);
+
+    final settingsAsync = ref.watch(settingsProvider);
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -65,28 +68,88 @@ class AppHeaderBarSliver extends ConsumerWidget {
 
                         Expanded(
                           child: Center(
-                            child: Chip(
-                              label: Text(
-                                formatDuration(duration),
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              avatar: const Icon(
-                                Icons.access_time,
-                                size: 18,
-                                semanticLabel: 'Worked hours',
-                              ),
-                              backgroundColor:
-                                  Theme.of(
-                                    context,
-                                  ).colorScheme.primaryContainer,
-                              labelPadding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
-                              ),
+                            child: settingsAsync.when(
+                              data:
+                                  (settings) => Chip(
+                                    label: Text(
+                                      "${formatDuration(duration)} / ${settings.maxHours % 1 == 0 ? "${settings.maxHours.toInt()}H" : "${settings.maxHours.toStringAsFixed(1)}H"}",
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    avatar: const Icon(
+                                      Icons.access_time,
+                                      size: 18,
+                                      semanticLabel: 'Worked hours',
+                                    ),
+                                    backgroundColor:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.primaryContainer,
+                                    labelPadding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                  ),
+                              error:
+                                  (_, _) => Chip(
+                                    label: Text(
+                                      formatDuration(duration),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    avatar: const Icon(
+                                      Icons.access_time,
+                                      size: 18,
+                                      semanticLabel: 'Worked hours',
+                                    ),
+                                    backgroundColor:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.primaryContainer,
+                                    labelPadding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                  ),
+                              loading:
+                                  () => Chip(
+                                    label: Text(
+                                      formatDuration(duration),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    avatar: const Icon(
+                                      Icons.access_time,
+                                      size: 18,
+                                      semanticLabel: 'Worked hours',
+                                    ),
+                                    backgroundColor:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.primaryContainer,
+                                    labelPadding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                  ),
                             ),
                           ),
                         ),

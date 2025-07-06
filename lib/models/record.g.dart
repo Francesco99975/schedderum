@@ -25,4 +25,5 @@ const _$RecordTypeEnumMap = {
   RecordType.SICK: 'SICK',
   RecordType.UNAVAILABLE: 'UNAVAILABLE',
   RecordType.VACATION: 'VACATION',
+  RecordType.TIME_OFF: 'TIME_OFF',
 };

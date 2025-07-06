@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Settings {
 
- bool get darkMode; bool get useMilitaryTime; double get breakFrequencyHours; double get breakDurationHours;
+ bool get darkMode; bool get useMilitaryTime; double get breakFrequencyHours; double get breakDurationHours; double get maxHours;
 /// Create a copy of Settings
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,16 +27,16 @@ $SettingsCopyWith<Settings> get copyWith => _$SettingsCopyWithImpl<Settings>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Settings&&(identical(other.darkMode, darkMode) || other.darkMode == darkMode)&&(identical(other.useMilitaryTime, useMilitaryTime) || other.useMilitaryTime == useMilitaryTime)&&(identical(other.breakFrequencyHours, breakFrequencyHours) || other.breakFrequencyHours == breakFrequencyHours)&&(identical(other.breakDurationHours, breakDurationHours) || other.breakDurationHours == breakDurationHours));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Settings&&(identical(other.darkMode, darkMode) || other.darkMode == darkMode)&&(identical(other.useMilitaryTime, useMilitaryTime) || other.useMilitaryTime == useMilitaryTime)&&(identical(other.breakFrequencyHours, breakFrequencyHours) || other.breakFrequencyHours == breakFrequencyHours)&&(identical(other.breakDurationHours, breakDurationHours) || other.breakDurationHours == breakDurationHours)&&(identical(other.maxHours, maxHours) || other.maxHours == maxHours));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,darkMode,useMilitaryTime,breakFrequencyHours,breakDurationHours);
+int get hashCode => Object.hash(runtimeType,darkMode,useMilitaryTime,breakFrequencyHours,breakDurationHours,maxHours);
 
 @override
 String toString() {
-  return 'Settings(darkMode: $darkMode, useMilitaryTime: $useMilitaryTime, breakFrequencyHours: $breakFrequencyHours, breakDurationHours: $breakDurationHours)';
+  return 'Settings(darkMode: $darkMode, useMilitaryTime: $useMilitaryTime, breakFrequencyHours: $breakFrequencyHours, breakDurationHours: $breakDurationHours, maxHours: $maxHours)';
 }
 
 
@@ -47,7 +47,7 @@ abstract mixin class $SettingsCopyWith<$Res>  {
   factory $SettingsCopyWith(Settings value, $Res Function(Settings) _then) = _$SettingsCopyWithImpl;
 @useResult
 $Res call({
- bool darkMode, bool useMilitaryTime, double breakFrequencyHours, double breakDurationHours
+ bool darkMode, bool useMilitaryTime, double breakFrequencyHours, double breakDurationHours, double maxHours
 });
 
 
@@ -64,12 +64,13 @@ class _$SettingsCopyWithImpl<$Res>
 
 /// Create a copy of Settings
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? darkMode = null,Object? useMilitaryTime = null,Object? breakFrequencyHours = null,Object? breakDurationHours = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? darkMode = null,Object? useMilitaryTime = null,Object? breakFrequencyHours = null,Object? breakDurationHours = null,Object? maxHours = null,}) {
   return _then(Settings(
 darkMode: null == darkMode ? _self.darkMode : darkMode // ignore: cast_nullable_to_non_nullable
 as bool,useMilitaryTime: null == useMilitaryTime ? _self.useMilitaryTime : useMilitaryTime // ignore: cast_nullable_to_non_nullable
 as bool,breakFrequencyHours: null == breakFrequencyHours ? _self.breakFrequencyHours : breakFrequencyHours // ignore: cast_nullable_to_non_nullable
 as double,breakDurationHours: null == breakDurationHours ? _self.breakDurationHours : breakDurationHours // ignore: cast_nullable_to_non_nullable
+as double,maxHours: null == maxHours ? _self.maxHours : maxHours // ignore: cast_nullable_to_non_nullable
 as double,
   ));
 }

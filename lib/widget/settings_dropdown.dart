@@ -154,6 +154,57 @@ class SettingsDropdown extends ConsumerWidget {
                     },
                   ),
                 ),
+
+                PopupMenuItem(
+                  enabled: false,
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      final currentSettings =
+                          ref.watch(settingsProvider).value!;
+                      return ListTile(
+                        title: Text(
+                          'Max Hours',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.remove),
+                              splashRadius: 16,
+                              padding: EdgeInsets.zero,
+                              onPressed:
+                                  () => ref
+                                      .read(settingsProvider.notifier)
+                                      .setMaxHours(
+                                        (currentSettings.maxHours - 0.5).clamp(
+                                          0.0,
+                                          1000.0,
+                                        ),
+                                      ),
+                            ),
+                            Text('${currentSettings.maxHours}h'),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              splashRadius: 16,
+                              padding: EdgeInsets.zero,
+                              onPressed:
+                                  () => ref
+                                      .read(settingsProvider.notifier)
+                                      .setMaxHours(
+                                        (currentSettings.maxHours + 0.5).clamp(
+                                          0.0,
+                                          1000.0,
+                                        ),
+                                      ),
+                            ),
+                          ],
+                        ),
+                        contentPadding: EdgeInsets.zero,
+                      );
+                    },
+                  ),
+                ),
               ],
           loading:
               () => [

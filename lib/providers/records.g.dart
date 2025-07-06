@@ -7,7 +7,7 @@ part of 'records.dart';
 // **************************************************************************
 
 String _$currentDepartmentWeekHoursHash() =>
-    r'0a7448cb8440adc15d619e6ec2457ecedbf15238';
+    r'a937c78e3414ed60879d088dd4250f0387d2cebd';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -189,7 +189,7 @@ class _CurrentDepartmentWeekHoursProviderElement
       (origin as CurrentDepartmentWeekHoursProvider).weekEnd;
 }
 
-String _$recordsHash() => r'364bce5e5b3c659193ebddd07af5341a1ce8838d';
+String _$recordsHash() => r'ac15a6fad7e75a2f103dbc7a0aa85a172d8b5972';
 
 abstract class _$Records
     extends

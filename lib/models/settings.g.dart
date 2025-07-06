@@ -11,6 +11,7 @@ Settings _$SettingsFromJson(Map<String, dynamic> json) => Settings(
   useMilitaryTime: json['useMilitaryTime'] as bool,
   breakFrequencyHours: (json['breakFrequencyHours'] as num).toDouble(),
   breakDurationHours: (json['breakDurationHours'] as num).toDouble(),
+  maxHours: (json['maxHours'] as num).toDouble(),
 );
 
 Map<String, dynamic> _$SettingsToJson(Settings instance) => <String, dynamic>{
@@ -18,4 +19,5 @@ Map<String, dynamic> _$SettingsToJson(Settings instance) => <String, dynamic>{
   'useMilitaryTime': instance.useMilitaryTime,
   'breakFrequencyHours': instance.breakFrequencyHours,
   'breakDurationHours': instance.breakDurationHours,
+  'maxHours': instance.maxHours,
 };

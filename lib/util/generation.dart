@@ -21,6 +21,7 @@ Future<String> generateSchedulePdf({
   required List<DisplayRecord> displayRecords,
   required List<DateTime> weekDays,
   required DateFormat timeFormatter,
+  required double maxHours,
 }) async {
   final pdf = pw.Document();
   final dateFmt = DateFormat('MMM d');
@@ -166,9 +167,7 @@ Future<String> generateSchedulePdf({
   }
   totalRow.add(
     buildCell(
-      weekTotal % 1 == 0
-          ? weekTotal.toInt().toString()
-          : weekTotal.toStringAsFixed(1),
+      "${weekTotal % 1 == 0 ? weekTotal.toInt().toString() : weekTotal.toStringAsFixed(1)} / ${maxHours % 1 == 0 ? maxHours.toInt().toString() : maxHours.toStringAsFixed(1)}",
       style: cellStyle,
       textAlign: pw.TextAlign.right,
     ),

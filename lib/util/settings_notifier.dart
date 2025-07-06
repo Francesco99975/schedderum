@@ -44,6 +44,7 @@ class SettingsNotifier extends AsyncNotifier<Settings> {
     useMilitaryTime: false,
     breakFrequencyHours: 6.0,
     breakDurationHours: 0.5,
+    maxHours: 190.0,
   );
 
   // Save settings, taking the new Settings object as a parameter
@@ -77,6 +78,13 @@ class SettingsNotifier extends AsyncNotifier<Settings> {
   Future<void> setBreakDuration(double hours) async {
     final currentSettings = state.value ?? _loadDefaults();
     final newSettings = currentSettings.copyWith(breakDurationHours: hours);
+    state = AsyncData(newSettings);
+    await _save(newSettings);
+  }
+
+  Future<void> setMaxHours(double hours) async {
+    final currentSettings = state.value ?? _loadDefaults();
+    final newSettings = currentSettings.copyWith(maxHours: hours);
     state = AsyncData(newSettings);
     await _save(newSettings);
   }

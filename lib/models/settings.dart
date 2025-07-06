@@ -11,6 +11,7 @@ class Settings with _$Settings {
     required this.useMilitaryTime,
     required this.breakFrequencyHours,
     required this.breakDurationHours,
+    required this.maxHours,
   });
 
   @override
@@ -21,6 +22,8 @@ class Settings with _$Settings {
   final double breakFrequencyHours;
   @override
   final double breakDurationHours;
+  @override
+  final double maxHours;
 
   factory Settings.fromJson(Map<String, dynamic> json) =>
       _$SettingsFromJson(json);
