@@ -28,6 +28,13 @@ class _AddExtensiveRecordFormScreenState
   DateTime? startDate;
   DateTime? endDate;
 
+  bool get _canSubmit =>
+      selectedEmployee != null &&
+      selectedType != null &&
+      startDate != null &&
+      endDate != null &&
+      !startDate!.isAfter(endDate!);
+
   Future<void> _pickDate(BuildContext context, bool isStart) async {
     final now = DateTime.now();
     final picked = await showDatePicker(
@@ -52,25 +59,6 @@ class _AddExtensiveRecordFormScreenState
   }
 
   Future<void> _submit() async {
-    if (selectedEmployee == null ||
-        selectedType == null ||
-        startDate == null ||
-        endDate == null) {
-      SnackBarService.showNegativeSnackBar(
-        context: context,
-        message: "All fields are required",
-      );
-      return;
-    }
-
-    if (startDate!.isAfter(endDate!)) {
-      SnackBarService.showNegativeSnackBar(
-        context: context,
-        message: "Start date must be before end date",
-      );
-      return;
-    }
-
     final weekStart = startOfWeek(startDate!);
     final weekEnd = endOfWeek(endDate!);
 
@@ -99,13 +87,73 @@ class _AddExtensiveRecordFormScreenState
           .addRecord(record, widget.departmentId, weekStart, weekEnd);
     }
 
-    if (!mounted) return;
+    if (mounted) {
+      context.pop();
+    }
+  }
 
-    context.pop();
+  Future<void> _handleDelete() async {
+    final weekStart = startOfWeek(startDate!);
+    final weekEnd = endOfWeek(endDate!);
+
+    final result = await ref.read(
+      recordsProvider(widget.departmentId, weekStart, weekEnd).future,
+    );
+
+    result.match(
+      (failure) => SnackBarService.showNegativeSnackBar(
+        context: context,
+        message: "Failed to load records",
+      ),
+      (records) async {
+        final toDelete =
+            records.where((r) {
+              final matchEmployee = r.employeeId == selectedEmployee!.id;
+              final matchType = r.record.type == selectedType;
+              final matchDate =
+                  !r.record.start.isBefore(startDate!) &&
+                  !r.record.end.isAfter(endDate!.add(const Duration(days: 1)));
+              return matchEmployee && matchType && matchDate;
+            }).toList();
+
+        if (toDelete.isEmpty) {
+          SnackBarService.showPositiveSnackBar(
+            context: context,
+            message: "No matching records to delete",
+          );
+          return;
+        }
+
+        for (final r in toDelete) {
+          await ref
+              .read(
+                recordsProvider(
+                  widget.departmentId,
+                  weekStart,
+                  weekEnd,
+                ).notifier,
+              )
+              .removeRecord(
+                r.record.toDbModel(r.employeeId),
+                widget.departmentId,
+                weekStart,
+                weekEnd,
+              );
+        }
+
+        if (mounted) {
+          SnackBarService.showPositiveSnackBar(
+            context: context,
+            message: "${toDelete.length} record(s) deleted",
+          );
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final palette = Theme.of(context).colorScheme;
     final employeesAsync = ref.watch(
       employeesByDepartmentProvider(widget.departmentId),
     );
@@ -113,97 +161,103 @@ class _AddExtensiveRecordFormScreenState
     return Scaffold(
       appBar: AppBar(title: const Text("Extended Record")),
       body: SafeArea(
-        minimum: const EdgeInsets.all(16),
+        minimum: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: employeesAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, _) => Center(child: Text('Error: $e')),
           data:
               (either) => either.match(
                 (failure) => Center(child: Text("Error: ${failure.message}")),
-                (employees) => SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      DropdownButtonFormField<Employee>(
-                        value: selectedEmployee,
-                        isExpanded: true,
-                        decoration: const InputDecoration(
-                          labelText: "Select Employee",
-                          border: OutlineInputBorder(),
-                        ),
-                        items:
-                            employees
-                                .map(
-                                  (e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(e.getFullName()),
-                                  ),
-                                )
-                                .toList(),
-                        onChanged:
-                            (e) => setState(() {
-                              selectedEmployee = e;
-                            }),
+                (employees) => Column(
+                  children: [
+                    DropdownButtonFormField<Employee>(
+                      value: selectedEmployee,
+                      isExpanded: true,
+                      decoration: const InputDecoration(
+                        labelText: "Employee",
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.person),
                       ),
-                      const SizedBox(height: 16),
-                      DropdownButtonFormField<RecordType>(
-                        value: selectedType,
-                        isExpanded: true,
-                        decoration: const InputDecoration(
-                          labelText: "Record Type",
-                          border: OutlineInputBorder(),
-                        ),
-                        items:
-                            [
-                              RecordType.UNAVAILABLE,
-                              RecordType.VACATION,
-                              RecordType.TIME_OFF,
-                            ].map((type) {
-                              return DropdownMenuItem(
-                                value: type,
-                                child: Text(type.name),
-                              );
-                            }).toList(),
-                        onChanged:
-                            (type) => setState(() {
-                              selectedType = type;
-                            }),
+                      items:
+                          employees
+                              .map(
+                                (e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(e.getFullName()),
+                                ),
+                              )
+                              .toList(),
+                      onChanged: (e) => setState(() => selectedEmployee = e),
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<RecordType>(
+                      value: selectedType,
+                      isExpanded: true,
+                      decoration: const InputDecoration(
+                        labelText: "Record Type",
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.event_note),
                       ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: FilledButton.tonalIcon(
-                              icon: const Icon(Icons.date_range),
-                              label: Text(
-                                startDate == null
-                                    ? "Start Date"
-                                    : "${startDate!.year}/${startDate!.month}/${startDate!.day}",
-                              ),
-                              onPressed: () => _pickDate(context, true),
+                      items:
+                          [
+                                RecordType.UNAVAILABLE,
+                                RecordType.VACATION,
+                                RecordType.TIME_OFF,
+                              ]
+                              .map(
+                                (type) => DropdownMenuItem(
+                                  value: type,
+                                  child: Text(type.name),
+                                ),
+                              )
+                              .toList(),
+                      onChanged: (t) => setState(() => selectedType = t),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: FilledButton.tonalIcon(
+                            icon: const Icon(Icons.date_range),
+                            label: Text(
+                              startDate == null
+                                  ? "Start Date"
+                                  : "${startDate!.year}/${startDate!.month}/${startDate!.day}",
                             ),
+                            onPressed: () => _pickDate(context, true),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: FilledButton.tonalIcon(
-                              icon: const Icon(Icons.date_range),
-                              label: Text(
-                                endDate == null
-                                    ? "End Date"
-                                    : "${endDate!.year}/${endDate!.month}/${endDate!.day}",
-                              ),
-                              onPressed: () => _pickDate(context, false),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: FilledButton.tonalIcon(
+                            icon: const Icon(Icons.date_range),
+                            label: Text(
+                              endDate == null
+                                  ? "End Date"
+                                  : "${endDate!.year}/${endDate!.month}/${endDate!.day}",
                             ),
+                            onPressed: () => _pickDate(context, false),
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    FilledButton.icon(
+                      icon: const Icon(Icons.check_circle),
+                      label: const Text("Create Records"),
+                      onPressed: _canSubmit ? _submit : null,
+                    ),
+                    const SizedBox(height: 8),
+                    FilledButton.icon(
+                      icon: const Icon(Icons.delete_forever),
+                      label: const Text("Delete Records"),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: palette.error,
+                        foregroundColor: palette.onError,
                       ),
-                      const SizedBox(height: 24),
-                      FilledButton.icon(
-                        icon: const Icon(Icons.check),
-                        label: const Text("Create Records"),
-                        onPressed: _submit,
-                      ),
-                    ],
-                  ),
+                      onPressed: _canSubmit ? _handleDelete : null,
+                    ),
+                  ],
                 ),
               ),
         ),

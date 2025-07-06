@@ -40,21 +40,33 @@ class _UpdateRecordModalState extends ConsumerState<UpdateRecordModal> {
     endTime = TimeOfDay.fromDateTime(rec.end);
   }
 
-  Future<void> _pickTime(BuildContext ctx, bool isStart) async {
-    final picked = await showTimePicker(
-      context: ctx,
+  Future<void> _pickTime(BuildContext context, bool isStart) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
       initialTime:
           isStart
               ? (startTime ?? TimeOfDay(hour: 9, minute: 0))
               : (endTime ?? TimeOfDay(hour: 17, minute: 0)),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            timePickerTheme: TimePickerThemeData(
+              hourMinuteTextStyle: TextStyle(fontSize: 40), // Adjust font size
+              inputDecorationTheme: InputDecorationTheme(
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 10,
+                ), // Add padding
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       setState(() {
-        if (isStart) {
-          startTime = picked;
-        } else {
-          endTime = picked;
-        }
+        isStart ? startTime = picked : endTime = picked;
       });
     }
   }

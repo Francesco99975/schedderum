@@ -263,15 +263,27 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                         _fabKey.currentState?.toggle();
                         showLoadingDialog(context);
 
-                        // Simulate file generation delay
-                        await Future.delayed(const Duration(seconds: 2));
+                        final path = await generateScheduleCsv(
+                          currentDepartment: widget.currentDepartment,
+                          weekStart: weekStart,
+                          weekEnd: weekEnd,
+                          displayRecords:
+                              records
+                                  .where(
+                                    (r) => r.record.type == RecordType.SHIFT,
+                                  )
+                                  .toList(),
+                          weekDays: weekDays,
+                          timeFormatter: activeTimeFormatter,
+                          maxHours: settings.maxHours,
+                        );
 
                         if (!context.mounted) return;
                         Navigator.of(context, rootNavigator: true).pop();
 
                         SnackBarService.showPositiveSnackBar(
                           context: context,
-                          message: "CSV exported successfully",
+                          message: "CSV exported successfully on $path",
                         );
                       },
                     ),

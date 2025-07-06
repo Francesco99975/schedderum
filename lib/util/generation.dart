@@ -223,10 +223,118 @@ Future<String> generateSchedulePdf({
   final targetDir = Directory('${baseDir!.path}/schedderum/pdf');
   if (!await targetDir.exists()) await targetDir.create(recursive: true);
 
-  final filename = 'schedule_${DateFormat('yyyyMMdd').format(weekStart)}.pdf';
+  final filename =
+      '${currentDepartment.name}_schedule_${DateFormat('yyyyMMdd').format(weekStart)}.pdf';
   final file = File('${targetDir.path}/$filename');
   final pdfBytes = await pdf.save();
   await file.writeAsBytes(pdfBytes, flush: true);
+
+  return file.path;
+}
+
+/// Converts your schedule data into CSV rows and writes to file.
+Future<String> generateScheduleCsv({
+  required Department currentDepartment,
+  required DateTime weekStart,
+  required DateTime weekEnd,
+  required List<DisplayRecord> displayRecords,
+  required List<DateTime> weekDays,
+  required DateFormat timeFormatter,
+  required double maxHours,
+}) async {
+  final dateFmt = DateFormat('EEE MMM d'); // e.g. Mon Jun 5
+  final empNames = {
+    for (var e in currentDepartment.employees) e.id: e.getFullName(),
+  };
+
+  // Group records by employee and day
+  final Map<String, Map<DateTime, List<DisplayRecord>>> byEmpDay = {};
+  for (var rec in displayRecords) {
+    final empId = rec.employeeId;
+    final day = DateTime(
+      rec.record.start.year,
+      rec.record.start.month,
+      rec.record.start.day,
+    );
+    byEmpDay.putIfAbsent(empId, () => {});
+    byEmpDay[empId]!.putIfAbsent(day, () => []);
+    byEmpDay[empId]![day]!.add(rec);
+  }
+
+  final dailyTotals = {for (var d in weekDays) d: 0.0};
+  double weekTotal = 0.0;
+  final buffer = StringBuffer();
+
+  // HEADER rows
+  buffer.writeln(
+    [
+      'Employee',
+      for (var d in weekDays)
+        '"${DateFormat('EEEE').format(d)} (${dateFmt.format(d)})"',
+      'TotalHours',
+    ].join(','),
+  );
+
+  // DATA ROWS per employee
+  empNames.forEach((empId, fullname) {
+    double empTotal = 0.0;
+    final row = <String>[];
+    row.add('"$fullname"');
+
+    for (var day in weekDays) {
+      final recs =
+          (byEmpDay[empId]?[day] ?? [])
+            ..sort((a, b) => a.record.start.compareTo(b.record.start));
+      final cell = recs
+          .map((r) {
+            final inStr = timeFormatter.format(r.record.start);
+            final outStr = timeFormatter.format(r.record.end);
+            final dur = r.record.duration.inMinutes / 60.0;
+            empTotal += dur;
+            dailyTotals[day] = dailyTotals[day]! + dur;
+            weekTotal += dur;
+            return '$inStr–$outStr';
+          })
+          .join(' | ');
+      row.add('"$cell"');
+    }
+
+    row.add(
+      empTotal % 1 == 0
+          ? empTotal.toInt().toString()
+          : empTotal.toStringAsFixed(1),
+    );
+    buffer.writeln(row.join(','));
+  });
+
+  // TOTAL ROW
+  final totalRow = <String>[];
+  totalRow.add('"Daily Totals"');
+  for (var day in weekDays) {
+    final dTotal = dailyTotals[day]!;
+    totalRow.add(
+      dTotal % 1 == 0 ? dTotal.toInt().toString() : dTotal.toStringAsFixed(1),
+    );
+  }
+  totalRow.add(
+    weekTotal % 1 == 0
+        ? weekTotal.toInt().toString()
+        : weekTotal.toStringAsFixed(1),
+  );
+  buffer.writeln(totalRow.join(','));
+
+  // WRITE TO FILE
+  final baseDir =
+      Platform.isAndroid || Platform.isIOS
+          ? await getApplicationDocumentsDirectory()
+          : await getDownloadsDirectory();
+  final targetDir = Directory('${baseDir!.path}/schedderum/csv');
+  if (!await targetDir.exists()) await targetDir.create(recursive: true);
+
+  final filename =
+      '${currentDepartment.name}_schedule_${DateFormat('yyyyMMdd').format(weekStart)}.csv';
+  final file = File('${targetDir.path}/$filename');
+  await file.writeAsString(buffer.toString(), flush: true);
 
   return file.path;
 }
