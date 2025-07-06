@@ -6,15 +6,20 @@ import 'package:schedderum/models/record.dart';
 import 'package:schedderum/providers/settings_provider.dart';
 import 'package:schedderum/util/formatters.dart';
 import 'package:schedderum/util/responsive.dart';
+import 'package:schedderum/widget/update_record.dart';
 
 class EmployeeRecordItem extends ConsumerWidget {
   final DisplayRecord displayRecord;
   final Function onDismissed;
+  final DateTime date;
+  final String currentDepartmentId;
 
   const EmployeeRecordItem({
     super.key,
     required this.displayRecord,
     required this.onDismissed,
+    required this.date,
+    required this.currentDepartmentId,
   });
 
   String _formatDuration(Duration duration) {
@@ -24,13 +29,6 @@ class EmployeeRecordItem extends ConsumerWidget {
     }
     return "${hours.toStringAsFixed(1)}H";
   }
-
-  // Future<void> _openForm(BuildContext context, [Record? existing]) async {
-  //   await showDialog<Record>(
-  //     context: context,
-  //     builder: (BuildContext context) {},
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -112,7 +110,17 @@ class EmployeeRecordItem extends ConsumerWidget {
         ),
         margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
         child: ListTile(
-          onTap: () {}, //_openForm(context, displayRecord.record),
+          onTap: () async {
+            await showDialog(
+              context: context,
+              builder:
+                  (_) => UpdateRecordModal(
+                    date: date,
+                    displayRecord: displayRecord,
+                    departmentId: currentDepartmentId,
+                  ),
+            );
+          },
           leading: settingsAsync.when(
             loading: () => const CircularProgressIndicator(),
             error: (error, stackTrace) => const Icon(Icons.error),

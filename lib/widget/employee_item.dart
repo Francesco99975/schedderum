@@ -136,19 +136,27 @@ class EmployeeItem extends ConsumerWidget {
             data:
                 (settings) => CircleAvatar(
                   backgroundColor: color,
-                  child: Text(
-                    _formatDuration(
-                      regulatedDuration(
-                        duration,
-                        settings.breakFrequencyHours,
-                        settings.breakDurationHours,
-                      ),
-                    ),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: getContrastingTextColor(color),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  child:
+                      shiftCount.contains("shift")
+                          ? Text(
+                            _formatDuration(
+                              regulatedDuration(
+                                duration,
+                                settings.breakFrequencyHours,
+                                settings.breakDurationHours,
+                              ),
+                            ),
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodySmall?.copyWith(
+                              color: getContrastingTextColor(color),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                          : Icon(
+                            Icons.person,
+                            color: getContrastingTextColor(color),
+                          ),
                 ),
           ),
           title: Text(

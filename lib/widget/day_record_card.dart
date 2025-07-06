@@ -88,6 +88,8 @@ class DayRecordCard extends StatelessWidget {
                             (r) => EmployeeRecordItem(
                               displayRecord: r,
                               onDismissed: (_) => onRecordDismissed(r),
+                              date: date,
+                              currentDepartmentId: currentDepartmentId,
                             ),
                           )
                           .toList(),

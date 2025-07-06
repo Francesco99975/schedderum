@@ -39,7 +39,10 @@ class Records extends _$Records {
       final displayRecords = <DisplayRecord>[];
 
       for (final r in rawRecs) {
-        if (r.start.isBefore(weekStart) || r.end.isAfter(weekEnd)) continue;
+        if (r.start.isBefore(weekStart) ||
+            r.end.isAfter(weekEnd.add(Duration(days: 1)))) {
+          continue;
+        }
 
         final emp = employeeMap[r.employeeId];
         if (emp == null) continue;

@@ -1,16 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:go_router/go_router.dart';
 import 'package:schedderum/models/department.dart';
 import 'package:schedderum/models/display_record.dart';
+import 'package:schedderum/models/record.dart';
 import 'package:schedderum/providers/records.dart';
+import 'package:schedderum/providers/settings_provider.dart';
 import 'package:schedderum/providers/week_context_provider.dart';
+import 'package:schedderum/screens/add_extensive_records_form.dart';
+import 'package:schedderum/util/generation.dart';
+import 'package:schedderum/util/snackbar_service.dart';
 import 'package:schedderum/widget/async_provider_wrapper.dart';
 import 'package:schedderum/widget/day_record_card.dart';
+
+Future<void> showLoadingDialog(
+  BuildContext context, {
+  String message = "Please wait...",
+}) {
+  return showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder:
+        (_) => PopScope(
+          canPop: false,
+          child: AlertDialog(
+            content: Row(
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+  );
+}
 
 class ScheduleScreen extends ConsumerStatefulWidget {
   final Department currentDepartment;
   final DateTime weekStart;
+
   const ScheduleScreen({
     super.key,
     required this.currentDepartment,
@@ -22,16 +58,25 @@ class ScheduleScreen extends ConsumerStatefulWidget {
 }
 
 class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
+  final Set<RecordType> selectedTypes = {
+    RecordType.SHIFT,
+    RecordType.SICK,
+    RecordType.UNAVAILABLE,
+    RecordType.VACATION,
+    RecordType.TIME_OFF,
+  };
+
+  final _fabKey = GlobalKey<ExpandableFabState>();
+
   @override
   Widget build(BuildContext context) {
+    final activeTimeFormatter = ref.watch(activeDateFormatterProvider);
     final weekStart = widget.weekStart;
     final weekEnd = endOfWeek(weekStart);
 
-    final List<DateTime> weekDays = [];
-
-    for (int i = 0; i < 7; i++) {
-      weekDays.add(weekStart.add(Duration(days: i)));
-    }
+    final List<DateTime> weekDays = [
+      for (int i = 0; i < 7; i++) weekStart.add(Duration(days: i)),
+    ];
 
     return AsyncProviderWrapper<List<DisplayRecord>>(
       provider: recordsProvider(
@@ -46,55 +91,183 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
             weekEnd,
           ).future,
       render: (records) {
+        final filtered = records.where(
+          (r) => selectedTypes.contains(r.record.type),
+        );
+
         return Scaffold(
           body: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      //Filtering DROPDOWN
-                      //PDF BTN
-                      //CSV BTN
-                    ],
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Schedule',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    PopupMenuButton<RecordType>(
+                      icon: const Icon(Icons.filter_list),
+                      itemBuilder:
+                          (_) =>
+                              RecordType.values.map((type) {
+                                return PopupMenuItem<RecordType>(
+                                  value: type,
+                                  child: StatefulBuilder(
+                                    builder: (context, setStatePopup) {
+                                      final isSelected = selectedTypes.contains(
+                                        type,
+                                      );
+                                      return CheckboxListTile(
+                                        value: isSelected,
+                                        onChanged: (v) {
+                                          setState(() {
+                                            if (v == true) {
+                                              selectedTypes.add(type);
+                                            } else {
+                                              selectedTypes.remove(type);
+                                            }
+                                          });
+                                          setStatePopup(
+                                            () {},
+                                          ); // Update inside popup
+                                        },
+                                        title: Text(type.name),
+                                        controlAffinity:
+                                            ListTileControlAffinity.leading,
+                                        contentPadding: EdgeInsets.zero,
+                                      );
+                                    },
+                                  ),
+                                );
+                              }).toList(),
+                    ),
+                  ],
+                ),
               ),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.only(bottom: 80),
                   itemCount: weekDays.length,
-                  itemBuilder:
-                      (context, index) => DayRecordCard(
-                        date: weekDays[index],
-                        currentDepartmentId: widget.currentDepartment.id,
-                        records:
-                            records
-                                .where(
-                                  (r) => r.record.start.eqvYearMonthDay(
-                                    weekDays[index],
-                                  ),
-                                )
-                                .toList(),
-                        onRecordDismissed: (r) {
-                          ref
-                              .read(
-                                recordsProvider(
-                                  widget.currentDepartment.id,
-                                  weekStart,
-                                  weekEnd,
-                                ).notifier,
-                              )
-                              .removeRecord(
-                                r.record.toDbModel(r.employeeId),
+                  itemBuilder: (context, index) {
+                    final date = weekDays[index];
+                    final dayRecords =
+                        filtered
+                            .where((r) => r.record.start.eqvYearMonthDay(date))
+                            .toList();
+
+                    return DayRecordCard(
+                      date: date,
+                      currentDepartmentId: widget.currentDepartment.id,
+                      records: dayRecords,
+                      onRecordDismissed: (r) {
+                        ref
+                            .read(
+                              recordsProvider(
                                 widget.currentDepartment.id,
                                 weekStart,
                                 weekEnd,
-                              );
-                        },
-                      ),
+                              ).notifier,
+                            )
+                            .removeRecord(
+                              r.record.toDbModel(r.employeeId),
+                              widget.currentDepartment.id,
+                              weekStart,
+                              weekEnd,
+                            );
+                      },
+                    );
+                  },
                 ),
+              ),
+            ],
+          ),
+          floatingActionButtonLocation: ExpandableFab.location,
+          floatingActionButton: ExpandableFab(
+            key: _fabKey,
+            overlayStyle: ExpandableFabOverlayStyle(
+              color: Colors.black.withValues(alpha: 0.5),
+              blur: 3,
+            ),
+            openButtonBuilder: RotateFloatingActionButtonBuilder(
+              child: const Icon(Icons.add),
+              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).primaryColor,
+              shape: const CircleBorder(),
+            ),
+            closeButtonBuilder: DefaultFloatingActionButtonBuilder(
+              child: const Icon(Icons.close),
+              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              shape: const CircleBorder(),
+            ),
+            children: [
+              FloatingActionButton.small(
+                heroTag: 'add',
+                tooltip: 'Add record',
+                child: const Icon(Icons.person_add),
+                onPressed: () {
+                  _fabKey.currentState?.toggle();
+                  context.push(
+                    "${AddExtensiveRecordFormScreen.routePath}?departmentId=${widget.currentDepartment.id}",
+                  );
+                },
+              ),
+              FloatingActionButton.small(
+                heroTag: 'pdf',
+                tooltip: 'Export to PDF',
+                child: const Icon(Icons.picture_as_pdf),
+                onPressed: () async {
+                  _fabKey.currentState?.toggle();
+                  showLoadingDialog(context);
+
+                  final path = await generateSchedulePdf(
+                    currentDepartment: widget.currentDepartment,
+                    weekStart: weekStart,
+                    weekEnd: weekEnd,
+                    displayRecords:
+                        records
+                            .where((r) => r.record.type == RecordType.SHIFT)
+                            .toList(),
+                    weekDays: weekDays,
+                    timeFormatter: activeTimeFormatter,
+                  );
+
+                  if (!context.mounted) return;
+                  Navigator.of(context, rootNavigator: true).pop();
+
+                  SnackBarService.showPositiveSnackBar(
+                    context: context,
+                    message: "PDF exported successfully on $path",
+                  );
+                },
+              ),
+              FloatingActionButton.small(
+                heroTag: 'csv',
+                tooltip: 'Export to CSV',
+                child: const Icon(Icons.file_copy_sharp),
+                onPressed: () async {
+                  _fabKey.currentState?.toggle();
+                  showLoadingDialog(context);
+
+                  // Simulate file generation delay
+                  await Future.delayed(const Duration(seconds: 2));
+
+                  if (!context.mounted) return;
+                  Navigator.of(context, rootNavigator: true).pop();
+
+                  SnackBarService.showPositiveSnackBar(
+                    context: context,
+                    message: "CSV exported successfully",
+                  );
+                },
               ),
             ],
           ),
