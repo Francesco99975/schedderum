@@ -28,7 +28,7 @@ class _FirstUseScreenState extends ConsumerState<FirstUseScreen> {
       TextEditingController();
   final TextEditingController _managerEmailController = TextEditingController();
   final TextEditingController _managerPhoneController = TextEditingController();
-  Color _selectedColor = Colors.blue;
+  Color _selectedColor = const Color.fromARGB(255, 4, 139, 163);
   bool loading = false;
 
   @override
@@ -79,7 +79,7 @@ class _FirstUseScreenState extends ConsumerState<FirstUseScreen> {
         departmentId: department.id,
       );
 
-      return ref.read(employeesProvider.notifier).addEmployee(manager);
+      return await ref.read(employeesProvider.notifier).addEmployee(manager);
     });
   }
 
