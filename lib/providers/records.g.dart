@@ -189,7 +189,7 @@ class _CurrentDepartmentWeekHoursProviderElement
       (origin as CurrentDepartmentWeekHoursProvider).weekEnd;
 }
 
-String _$recordsHash() => r'ac15a6fad7e75a2f103dbc7a0aa85a172d8b5972';
+String _$recordsHash() => r'c4d91549848db038f48d36b51879cf213cc5de31';
 
 abstract class _$Records
     extends

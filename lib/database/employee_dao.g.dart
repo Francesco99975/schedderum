@@ -6,4 +6,5 @@ part of 'employee_dao.dart';
 mixin _$EmployeeDaoMixin on DatabaseAccessor<AppDatabase> {
   $DepartmentsTable get departments => attachedDatabase.departments;
   $EmployeesTable get employees => attachedDatabase.employees;
+  $RecordsTable get records => attachedDatabase.records;
 }

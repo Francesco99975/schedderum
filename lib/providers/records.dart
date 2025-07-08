@@ -63,6 +63,23 @@ class Records extends _$Records {
     }
   }
 
+  bool _checkSameEmployeeRecordInterception(db.Record r) {
+    return state.when(
+      data:
+          (data) => data.match(
+            (failure) => false,
+            (records) => records.any(
+              (dr) =>
+                  dr.employeeId == r.employeeId &&
+                  dr.record.start.isBefore(r.end) &&
+                  dr.record.end.isAfter(r.start),
+            ),
+          ),
+      error: (_, _) => false,
+      loading: () => false,
+    );
+  }
+
   Future<Either<Failure, db.Record>> addRecord(
     db.Record r,
     String departmentId,
@@ -70,6 +87,10 @@ class Records extends _$Records {
     DateTime weekEnd,
   ) async {
     try {
+      if (_checkSameEmployeeRecordInterception(r)) {
+        return Left(Failure(message: "Same employee record interception"));
+      }
+
       final dao = ref.read(databaseProvider).recordDao;
       await dao.insertRecord(r);
       final updated = await _fetchRecords(departmentId, weekStart, weekEnd);
@@ -87,6 +108,10 @@ class Records extends _$Records {
     DateTime weekEnd,
   ) async {
     try {
+      if (_checkSameEmployeeRecordInterception(r)) {
+        return Left(Failure(message: "Same employee record interception"));
+      }
+
       final dao = ref.read(databaseProvider).recordDao;
       await dao.updateRecord(r);
       final updated = await _fetchRecords(departmentId, weekStart, weekEnd);

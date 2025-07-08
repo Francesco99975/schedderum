@@ -3,7 +3,7 @@ import 'database.dart';
 
 part 'employee_dao.g.dart';
 
-@DriftAccessor(tables: [Employees])
+@DriftAccessor(tables: [Employees, Records])
 class EmployeeDao extends DatabaseAccessor<AppDatabase>
     with _$EmployeeDaoMixin {
   EmployeeDao(super.db);
@@ -21,6 +21,9 @@ class EmployeeDao extends DatabaseAccessor<AppDatabase>
       into(employees).insert(employee);
   Future<void> updateEmployee(Employee employee) =>
       update(employees).replace(employee);
-  Future<void> deleteEmployee(String id) =>
-      (delete(employees)..where((e) => e.id.equals(id))).go();
+  Future<void> deleteEmployee(String id) {
+    (delete(employees)..where((e) => e.id.equals(id))).go();
+    (delete(records)..where((r) => r.employeeId.equals(id))).go();
+    return Future.value(null);
+  }
 }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:schedderum/extensions/strings.dart';
+import 'package:schedderum/helpers/failure.dart';
 import 'package:schedderum/helpers/uuid.dart';
 import 'package:schedderum/models/employee.dart';
 import 'package:schedderum/providers/employees.dart';
+import 'package:schedderum/util/snackbar_service.dart';
 
 class EmployeeFormDialog extends ConsumerStatefulWidget {
   final Employee? initial;
@@ -40,15 +44,41 @@ class _EmployeeFormDialogState extends ConsumerState<EmployeeFormDialog> {
     selectedColor = Color(e?.color ?? Colors.blue.toARGB32());
   }
 
-  void _onSubmit() async {
-    if (!_formKey.currentState!.validate()) return;
+  Future<Either<Failure, void>> _onSubmit() async {
+    if (!_formKey.currentState!.validate()) {
+      return Left(Failure(message: 'Invalid form'));
+    }
     _formKey.currentState!.save();
+
+    // Validate Email
+    const emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    final re = RegExp(emailPattern);
+    if (!re.hasMatch(email)) {
+      return Left(Failure(message: 'Please enter a valid email'));
+    }
+
+    // Validate Phone
+    final digitsOnly = phone.replaceAll(RegExp(r'\D'), '');
+
+    if (digitsOnly.length != 10) {
+      return Left(Failure(message: 'Please enter a valid phone number'));
+    }
+
+    final phonePattern = RegExp(r'^\d{10}$');
+    if (!phonePattern.hasMatch(digitsOnly)) {
+      return Left(Failure(message: 'Please enter a valid phone number'));
+    }
+
+    final area = digitsOnly.substring(0, 3);
+    final prefix = digitsOnly.substring(3, 6);
+    final line = digitsOnly.substring(6, 10);
+    phone = '($area) $prefix-$line';
 
     final emp = Employee(
       id: widget.initial?.id ?? uuid(),
-      firstname: firstname,
-      middlename: middlename,
-      lastname: lastname,
+      firstname: firstname.toLowerCase().capitalize(),
+      middlename: middlename.toLowerCase().capitalize(),
+      lastname: lastname.toLowerCase().capitalize(),
       email: email,
       phone: phone,
       priority: priority,
@@ -65,12 +95,7 @@ class _EmployeeFormDialogState extends ConsumerState<EmployeeFormDialog> {
               emp.toDbModel(widget.currentDepartmentId),
             );
 
-    result.match(
-      (l) => ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: ${l.message}'))),
-      (_) => Navigator.of(context).pop(),
-    );
+    return result.match((l) => Left(l), (_) => Right(null));
   }
 
   @override
@@ -188,7 +213,20 @@ class _EmployeeFormDialogState extends ConsumerState<EmployeeFormDialog> {
               onPressed: () => Navigator.pop(context),
               child: const Text('Cancel'),
             ),
-            ElevatedButton(onPressed: _onSubmit, child: const Text('Save')),
+            ElevatedButton(
+              onPressed: () async {
+                final result = await _onSubmit();
+
+                result.match(
+                  (l) => SnackBarService.showNegativeSnackBar(
+                    context: context,
+                    message: l.message,
+                  ),
+                  (_) => Navigator.pop(context),
+                );
+              },
+              child: const Text('Save'),
+            ),
           ],
         );
       },

@@ -3,6 +3,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:schedderum/database/database.dart';
+import 'package:schedderum/extensions/strings.dart';
 import 'package:schedderum/helpers/failure.dart';
 import 'package:schedderum/helpers/uuid.dart';
 import 'package:schedderum/providers/departments.dart';
@@ -45,27 +46,54 @@ class _FirstUseScreenState extends ConsumerState<FirstUseScreen> {
   Future<Either<Failure, void>> _setup() async {
     loading = true;
 
-    final departmentName = _departmentNameController.text.trim();
-    final managerFirstname = _managerFirstnameController.text.trim();
-    final managerMiddlename = _managerMiddleController.text.trim();
-    final managerLastname = _managerLastnameController.text.trim();
-    final managerEmail = _managerEmailController.text.trim();
-    final managerPhone = _managerPhoneController.text.trim();
+    final departmentName =
+        _departmentNameController.text.trim().toLowerCase().capitalize();
+    final managerFirstname =
+        _managerFirstnameController.text.trim().toLowerCase().capitalize();
+    final managerMiddlename =
+        _managerMiddleController.text.trim().toLowerCase().capitalize();
+    final managerLastname =
+        _managerLastnameController.text.trim().toLowerCase().capitalize();
+    final managerEmail = _managerEmailController.text.trim().toLowerCase();
+    final managerPhoneRaw = _managerPhoneController.text.trim();
 
     if (departmentName.isEmpty ||
         managerFirstname.isEmpty ||
-        managerLastname.isEmpty) {
+        managerLastname.isEmpty ||
+        managerEmail.isEmpty ||
+        managerPhoneRaw.isEmpty) {
       return Left(Failure(message: 'Please fill out all fields'));
     }
+
+    // Validate Email
+    const emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    final re = RegExp(emailPattern);
+    if (!re.hasMatch(managerEmail)) {
+      return Left(Failure(message: 'Please enter a valid email'));
+    }
+
+    // Validate Phone
+    final digitsOnly = managerPhoneRaw.replaceAll(RegExp(r'\D'), '');
+
+    if (digitsOnly.length != 10) {
+      return Left(Failure(message: 'Please enter a valid phone number'));
+    }
+
+    final phonePattern = RegExp(r'^\d{10}$');
+    if (!phonePattern.hasMatch(digitsOnly)) {
+      return Left(Failure(message: 'Please enter a valid phone number'));
+    }
+
+    final area = digitsOnly.substring(0, 3);
+    final prefix = digitsOnly.substring(3, 6);
+    final line = digitsOnly.substring(6, 10);
+    final managerPhone = '($area) $prefix-$line';
 
     final response = await ref
         .read(departmentsProvider.notifier)
         .addDepartment(Department(id: uuid(), name: departmentName));
 
     return response.match((l) => Left(l), (department) async {
-      await ref
-          .read(currentDepartmentProvider.notifier)
-          .setCurrent(department.id);
       final manager = Employee(
         id: uuid(),
         firstname: managerFirstname,
@@ -79,7 +107,13 @@ class _FirstUseScreenState extends ConsumerState<FirstUseScreen> {
         departmentId: department.id,
       );
 
-      return await ref.read(employeesProvider.notifier).addEmployee(manager);
+      await ref.read(employeesProvider.notifier).addEmployee(manager);
+
+      await ref
+          .read(currentDepartmentProvider.notifier)
+          .setCurrent(department.id);
+
+      return Right(null);
     });
   }
 
