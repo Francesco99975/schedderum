@@ -1,4 +1,4 @@
-package com.example.schedderum
+package ink.urx.schedderum
 
 import io.flutter.embedding.android.FlutterActivity
 

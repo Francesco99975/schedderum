@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +16,7 @@ import 'package:schedderum/util/generation.dart';
 import 'package:schedderum/util/snackbar_service.dart';
 import 'package:schedderum/widget/async_provider_wrapper.dart';
 import 'package:schedderum/widget/day_record_card.dart';
+import 'package:share_plus/share_plus.dart';
 
 Future<void> showLoadingDialog(
   BuildContext context, {
@@ -250,13 +253,38 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                           maxHours: settings.maxHours,
                         );
 
-                        if (!context.mounted) return;
-                        Navigator.of(context, rootNavigator: true).pop();
+                        if (!Platform.isLinux) {
+                          final shareParams = ShareParams(
+                            files: [
+                              XFile(
+                                path,
+                                mimeType: 'application/pdf',
+                                name: path.split('/').last,
+                              ),
+                            ],
+                          );
 
-                        SnackBarService.showPositiveSnackBar(
-                          context: context,
-                          message: "PDF exported successfully on $path",
-                        );
+                          final result = await SharePlus.instance.share(
+                            shareParams,
+                          );
+
+                          if (!context.mounted) return;
+                          Navigator.of(context, rootNavigator: true).pop();
+
+                          if (result.status == ShareResultStatus.success) {
+                            SnackBarService.showPositiveSnackBar(
+                              context: context,
+                              message: "PDF exported successfully",
+                            );
+                          }
+                        } else {
+                          if (!context.mounted) return;
+                          Navigator.of(context, rootNavigator: true).pop();
+                          SnackBarService.showPositiveSnackBar(
+                            context: context,
+                            message: "PDF exported successfully on $path",
+                          );
+                        }
                       },
                     ),
                     FloatingActionButton.small(
@@ -286,13 +314,38 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                           maxHours: settings.maxHours,
                         );
 
-                        if (!context.mounted) return;
-                        Navigator.of(context, rootNavigator: true).pop();
+                        if (!Platform.isLinux) {
+                          final shareParams = ShareParams(
+                            files: [
+                              XFile(
+                                path,
+                                mimeType: 'text/csv',
+                                name: path.split('/').last,
+                              ),
+                            ],
+                          );
 
-                        SnackBarService.showPositiveSnackBar(
-                          context: context,
-                          message: "CSV exported successfully on $path",
-                        );
+                          final result = await SharePlus.instance.share(
+                            shareParams,
+                          );
+
+                          if (!context.mounted) return;
+                          Navigator.of(context, rootNavigator: true).pop();
+
+                          if (result.status == ShareResultStatus.success) {
+                            SnackBarService.showPositiveSnackBar(
+                              context: context,
+                              message: "CSV exported successfully",
+                            );
+                          }
+                        } else {
+                          if (!context.mounted) return;
+                          Navigator.of(context, rootNavigator: true).pop();
+                          SnackBarService.showPositiveSnackBar(
+                            context: context,
+                            message: "CSV exported successfully on $path",
+                          );
+                        }
                       },
                     ),
                   ],

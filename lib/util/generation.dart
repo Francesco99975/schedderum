@@ -218,7 +218,7 @@ Future<String> generateSchedulePdf({
   // Save PDF to appropriate folder
   final baseDir =
       Platform.isAndroid || Platform.isIOS
-          ? await getApplicationDocumentsDirectory()
+          ? await getExternalStorageDirectory()
           : await getDownloadsDirectory();
   final targetDir = Directory('${baseDir!.path}/schedderum/pdf');
   if (!await targetDir.exists()) await targetDir.create(recursive: true);
@@ -326,7 +326,7 @@ Future<String> generateScheduleCsv({
   // WRITE TO FILE
   final baseDir =
       Platform.isAndroid || Platform.isIOS
-          ? await getApplicationDocumentsDirectory()
+          ? await getExternalStorageDirectory()
           : await getDownloadsDirectory();
   final targetDir = Directory('${baseDir!.path}/schedderum/csv');
   if (!await targetDir.exists()) await targetDir.create(recursive: true);

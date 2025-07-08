@@ -46,11 +46,13 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ),
         ),
-        bottomNavigationBar: const TabBar(
-          tabs: [
-            Tab(icon: Icon(Icons.schedule)),
-            Tab(icon: Icon(Icons.people)),
-          ],
+        bottomNavigationBar: SafeArea(
+          child: const TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.schedule)),
+              Tab(icon: Icon(Icons.people)),
+            ],
+          ),
         ),
       ),
     );
