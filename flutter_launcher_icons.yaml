@@ -35,4 +35,5 @@ flutter_launcher_icons:
 
   linux:
     generate: true
+    icon_size: 48
     image_path: "assets/icon/icon.png"
