@@ -108,10 +108,6 @@ class Records extends _$Records {
     DateTime weekEnd,
   ) async {
     try {
-      if (_checkSameEmployeeRecordInterception(r)) {
-        return Left(Failure(message: "Same employee record interception"));
-      }
-
       final dao = ref.read(databaseProvider).recordDao;
       await dao.updateRecord(r);
       final updated = await _fetchRecords(departmentId, weekStart, weekEnd);

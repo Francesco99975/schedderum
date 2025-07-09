@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:schedderum/models/department.dart';
 import 'package:schedderum/models/display_record.dart';
+import 'package:schedderum/util/formatters.dart';
 
 /// Generates a schedule PDF for the given department and week.
 ///
@@ -22,6 +23,8 @@ Future<String> generateSchedulePdf({
   required List<DateTime> weekDays,
   required DateFormat timeFormatter,
   required double maxHours,
+  required double bfh,
+  required double bdh,
 }) async {
   final pdf = pw.Document();
   final dateFmt = DateFormat('MMM d');
@@ -124,9 +127,8 @@ Future<String> generateSchedulePdf({
           .map((r) {
             final start = timeFormatter.format(r.record.start);
             final end = timeFormatter.format(r.record.end);
-            final dur =
-                r.record.duration.inHours +
-                (r.record.duration.inMinutes % 60) / 60;
+            final rd = regulatedDuration(r.record.duration, bfh, bdh);
+            final dur = rd.inHours + (rd.inMinutes % 60) / 60;
             dailyTotals[day] = dailyTotals[day]! + dur;
             empTotal += dur;
             return '$start - $end';
@@ -241,6 +243,8 @@ Future<String> generateScheduleCsv({
   required List<DateTime> weekDays,
   required DateFormat timeFormatter,
   required double maxHours,
+  required double bfh,
+  required double bdh,
 }) async {
   final dateFmt = DateFormat('EEE MMM d'); // e.g. Mon Jun 5
   final empNames = {
@@ -289,11 +293,12 @@ Future<String> generateScheduleCsv({
           .map((r) {
             final inStr = timeFormatter.format(r.record.start);
             final outStr = timeFormatter.format(r.record.end);
-            final dur = r.record.duration.inMinutes / 60.0;
+            final rd = regulatedDuration(r.record.duration, bfh, bdh);
+            final dur = rd.inMinutes / 60.0;
             empTotal += dur;
             dailyTotals[day] = dailyTotals[day]! + dur;
             weekTotal += dur;
-            return '$inStr–$outStr';
+            return '$inStr - $outStr';
           })
           .join(' | ');
       row.add('"$cell"');

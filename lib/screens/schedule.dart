@@ -251,6 +251,8 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                           weekDays: weekDays,
                           timeFormatter: activeTimeFormatter,
                           maxHours: settings.maxHours,
+                          bfh: settings.breakFrequencyHours,
+                          bdh: settings.breakDurationHours,
                         );
 
                         if (!Platform.isLinux) {
@@ -312,6 +314,8 @@ class _ScheduleScreenState extends ConsumerState<ScheduleScreen> {
                           weekDays: weekDays,
                           timeFormatter: activeTimeFormatter,
                           maxHours: settings.maxHours,
+                          bfh: settings.breakFrequencyHours,
+                          bdh: settings.breakDurationHours,
                         );
 
                         if (!Platform.isLinux) {
