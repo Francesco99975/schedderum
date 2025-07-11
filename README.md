@@ -1,16 +1,45 @@
 # schedderum
 
-A new Flutter project.
+**Manage your team's schedules entirely offline on your Android device.**
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## Overview
 
-A few resources to get you started if this is your first Flutter project:
+schedderum is a simple, lightweight Flutter app that lets managers organize employee schedules by department without needing any internet connection. All data is stored locally on your device for maximum privacy and reliability.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features
+
+- **Departments:** Create and name departments (e.g., Sales, Engineering).
+- **Employees:** Add or remove employees and assign them to departments.
+- **Shifts:** Set start/end times for each employee’s shifts throughout the week.
+- **Weekly View:** Quickly see the schedule for any week and department.
+- **Offline-First:** Fully functional without Wi‑Fi or mobile data.
+
+---
+
+## Installation (Android)
+
+1. Go to the **Releases** page on GitHub: [schedderum Releases](https://github.com/yourusername/schedderum/releases)
+2. Download the latest `schedderum-<version>.apk` under **Assets**.
+3. On your Android device, enable installations from unknown sources:
+   - Settings → Security → Allow installations from unknown apps.
+4. Open the downloaded APK and follow the prompts to install.
+
+> Currently, only Android is supported. iOS and desktop versions are coming soon.
+
+---
+
+## License
+
+MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## Support
+
+For questions or feedback, reach out to the maintainer:
+
+**Your Name** (<youremail@example.com>)
