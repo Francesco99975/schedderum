@@ -4,6 +4,7 @@ import 'package:schedderum/database/database.dart' as db;
 import 'package:schedderum/helpers/uuid.dart';
 import 'package:schedderum/models/employee.dart';
 import 'package:schedderum/models/record.dart';
+import 'package:schedderum/providers/clipboardx.dart';
 import 'package:schedderum/providers/employees.dart';
 import 'package:schedderum/providers/records.dart';
 import 'package:schedderum/providers/week_context_provider.dart';
@@ -33,6 +34,20 @@ class _AddRecordModalState extends ConsumerState<AddRecordModal> {
   TimeOfDay? endTime;
   RecordType selectedType = RecordType.SHIFT;
   bool isAllDay = false;
+
+  @override
+  initState() {
+    super.initState();
+    final clip = ref.read(clipboardxProvider);
+
+    clip.maybeMemoStart.match(() {}, (start) {
+      startTime = TimeOfDay.fromDateTime(start);
+    });
+
+    clip.maybeMemoEnd.match(() {}, (end) {
+      endTime = TimeOfDay.fromDateTime(end);
+    });
+  }
 
   Future<void> _pickTime(BuildContext context, bool isStart) async {
     final TimeOfDay? picked = await showTimePicker(

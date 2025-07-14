@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:schedderum/models/display_record.dart';
 import 'package:schedderum/models/record.dart';
+import 'package:schedderum/providers/clipboardx.dart';
 import 'package:schedderum/providers/settings_provider.dart';
 import 'package:schedderum/util/formatters.dart';
 import 'package:schedderum/util/responsive.dart';
+import 'package:schedderum/util/snackbar_service.dart';
 import 'package:schedderum/widget/update_record.dart';
 
 class EmployeeRecordItem extends ConsumerWidget {
@@ -47,7 +49,11 @@ class EmployeeRecordItem extends ConsumerWidget {
     return Dismissible(
       key: ValueKey(displayRecord.record.id),
       direction: DismissDirection.startToEnd, // left to right
-      onDismissed: (direction) => onDismissed(direction),
+      onDismissed: (direction) {
+        if (direction == DismissDirection.startToEnd) {
+          onDismissed(direction);
+        }
+      },
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
           return await showDialog(
@@ -98,6 +104,7 @@ class EmployeeRecordItem extends ConsumerWidget {
         alignment: Alignment.centerLeft,
         child: const Icon(Icons.delete, color: Colors.white),
       ),
+
       child: Card(
         elevation: 5.0,
         shape: RoundedRectangleBorder(
@@ -119,6 +126,15 @@ class EmployeeRecordItem extends ConsumerWidget {
                     displayRecord: displayRecord,
                     departmentId: currentDepartmentId,
                   ),
+            );
+          },
+          onLongPress: () {
+            ref
+                .read(clipboardxProvider.notifier)
+                .copyDisplayRecord(displayRecord);
+            SnackBarService.showPositiveSnackBar(
+              context: context,
+              message: "Record Copied to clipboard",
             );
           },
           leading: settingsAsync.when(
@@ -197,6 +213,21 @@ class EmployeeRecordItem extends ConsumerWidget {
             style: Theme.of(
               context,
             ).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
+          ),
+          trailing: IconButton(
+            onPressed: () {
+              ref
+                  .read(clipboardxProvider.notifier)
+                  .copyShift(
+                    displayRecord.record.start,
+                    displayRecord.record.end,
+                  );
+              SnackBarService.showPositiveSnackBar(
+                context: context,
+                message: "Shift Copied to clipboard",
+              );
+            },
+            icon: const Icon(Icons.copy_all, color: Colors.lightGreenAccent),
           ),
         ),
       ),

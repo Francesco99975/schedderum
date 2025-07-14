@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'department.dart';
+part of 'clipboard.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,40 +13,40 @@ part of 'department.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$Department {
+mixin _$Clipboard {
 
- String get id; String get name; List<Employee> get employees;
-/// Create a copy of Department
+ Option<DisplayRecord> get maybeMemoDisplayRecord; Option<DateTime> get maybeMemoStart; Option<DateTime> get maybeMemoEnd;
+/// Create a copy of Clipboard
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$DepartmentCopyWith<Department> get copyWith => _$DepartmentCopyWithImpl<Department>(this as Department, _$identity);
+$ClipboardCopyWith<Clipboard> get copyWith => _$ClipboardCopyWithImpl<Clipboard>(this as Clipboard, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Department&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&const DeepCollectionEquality().equals(other.employees, employees));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Clipboard&&(identical(other.maybeMemoDisplayRecord, maybeMemoDisplayRecord) || other.maybeMemoDisplayRecord == maybeMemoDisplayRecord)&&(identical(other.maybeMemoStart, maybeMemoStart) || other.maybeMemoStart == maybeMemoStart)&&(identical(other.maybeMemoEnd, maybeMemoEnd) || other.maybeMemoEnd == maybeMemoEnd));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,const DeepCollectionEquality().hash(employees));
+int get hashCode => Object.hash(runtimeType,maybeMemoDisplayRecord,maybeMemoStart,maybeMemoEnd);
 
 @override
 String toString() {
-  return 'Department(id: $id, name: $name, employees: $employees)';
+  return 'Clipboard(maybeMemoDisplayRecord: $maybeMemoDisplayRecord, maybeMemoStart: $maybeMemoStart, maybeMemoEnd: $maybeMemoEnd)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $DepartmentCopyWith<$Res>  {
-  factory $DepartmentCopyWith(Department value, $Res Function(Department) _then) = _$DepartmentCopyWithImpl;
+abstract mixin class $ClipboardCopyWith<$Res>  {
+  factory $ClipboardCopyWith(Clipboard value, $Res Function(Clipboard) _then) = _$ClipboardCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, List<Employee> employees
+ Option<DisplayRecord> maybeMemoDisplayRecord, Option<DateTime> maybeMemoStart, Option<DateTime> maybeMemoEnd
 });
 
 
@@ -54,29 +54,29 @@ $Res call({
 
 }
 /// @nodoc
-class _$DepartmentCopyWithImpl<$Res>
-    implements $DepartmentCopyWith<$Res> {
-  _$DepartmentCopyWithImpl(this._self, this._then);
+class _$ClipboardCopyWithImpl<$Res>
+    implements $ClipboardCopyWith<$Res> {
+  _$ClipboardCopyWithImpl(this._self, this._then);
 
-  final Department _self;
-  final $Res Function(Department) _then;
+  final Clipboard _self;
+  final $Res Function(Clipboard) _then;
 
-/// Create a copy of Department
+/// Create a copy of Clipboard
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? employees = null,}) {
-  return _then(Department(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,employees: null == employees ? _self.employees : employees // ignore: cast_nullable_to_non_nullable
-as List<Employee>,
+@pragma('vm:prefer-inline') @override $Res call({Object? maybeMemoDisplayRecord = null,Object? maybeMemoStart = null,Object? maybeMemoEnd = null,}) {
+  return _then(Clipboard(
+maybeMemoDisplayRecord: null == maybeMemoDisplayRecord ? _self.maybeMemoDisplayRecord : maybeMemoDisplayRecord // ignore: cast_nullable_to_non_nullable
+as Option<DisplayRecord>,maybeMemoStart: null == maybeMemoStart ? _self.maybeMemoStart : maybeMemoStart // ignore: cast_nullable_to_non_nullable
+as Option<DateTime>,maybeMemoEnd: null == maybeMemoEnd ? _self.maybeMemoEnd : maybeMemoEnd // ignore: cast_nullable_to_non_nullable
+as Option<DateTime>,
   ));
 }
 
 }
 
 
-/// Adds pattern-matching-related methods to [Department].
-extension DepartmentPatterns on Department {
+/// Adds pattern-matching-related methods to [Clipboard].
+extension ClipboardPatterns on Clipboard {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

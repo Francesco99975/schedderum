@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:schedderum/helpers/uuid.dart';
 import 'package:schedderum/models/display_record.dart';
+import 'package:schedderum/providers/clipboardx.dart';
+import 'package:schedderum/providers/records.dart';
+import 'package:schedderum/providers/week_context_provider.dart';
+import 'package:schedderum/util/snackbar_service.dart';
 import 'package:schedderum/widget/add_new_record.dart';
 import 'package:schedderum/widget/employee_record_item.dart';
 
-class DayRecordCard extends StatelessWidget {
+class DayRecordCard extends ConsumerWidget {
   final DateTime date;
   final List<DisplayRecord> records;
   final void Function(DisplayRecord) onRecordDismissed;
@@ -19,7 +25,7 @@ class DayRecordCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final day = DateFormat.d().format(date); // e.g. 21
     final weekday = DateFormat.E().format(date); // e.g. Mon
 
@@ -55,6 +61,64 @@ class DayRecordCard extends StatelessWidget {
                           weekday: weekday,
                           departmentId: currentDepartmentId,
                         ),
+                  );
+                },
+                onLongPress: () {
+                  final weekStart = startOfWeek(date);
+                  final weekEnd = endOfWeek(weekStart);
+                  final clip = ref.watch(clipboardxProvider);
+                  clip.maybeMemoDisplayRecord.match(
+                    () {
+                      SnackBarService.showNegativeSnackBar(
+                        context: context,
+                        message: "No record to copy",
+                      );
+                    },
+                    (dr) async {
+                      final result = await ref
+                          .read(
+                            recordsProvider(
+                              currentDepartmentId,
+                              weekStart,
+                              weekEnd,
+                            ).notifier,
+                          )
+                          .addRecord(
+                            dr.record
+                                .copyWith(
+                                  id: uuid(),
+                                  start: DateTime(
+                                    date.year,
+                                    date.month,
+                                    date.day,
+                                    dr.record.start.hour,
+                                    dr.record.start.minute,
+                                  ),
+                                  end: DateTime(
+                                    date.year,
+                                    date.month,
+                                    date.day,
+                                    dr.record.end.hour,
+                                    dr.record.end.minute,
+                                  ),
+                                )
+                                .toDbModel(dr.employeeId),
+                            currentDepartmentId,
+                            weekStart,
+                            weekEnd,
+                          );
+
+                      result.match(
+                        (l) => SnackBarService.showNegativeSnackBar(
+                          context: context,
+                          message: "Failed to paste record: ${l.message}",
+                        ),
+                        (r) => SnackBarService.showPositiveSnackBar(
+                          context: context,
+                          message: "Record pasted from clipboard to $day",
+                        ),
+                      );
+                    },
                   );
                 },
                 child: Column(

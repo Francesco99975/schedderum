@@ -36,7 +36,7 @@ class Record with _$Record {
     id: id,
     start: start,
     end: end,
-    type: type.toString(),
+    type: type.name,
     employeeId: empId,
   );
 
