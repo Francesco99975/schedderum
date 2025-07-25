@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:schedderum/models/display_record.dart';
+import 'package:schedderum/models/employee.dart';
 import 'package:schedderum/models/record.dart';
+import 'package:schedderum/providers/employees.dart';
 import 'package:schedderum/providers/records.dart';
 import 'package:schedderum/providers/week_context_provider.dart';
 import 'package:schedderum/util/snackbar_service.dart';
 
 class UpdateRecordModal extends ConsumerStatefulWidget {
+  final String selectedEmployeeId;
   final DisplayRecord displayRecord;
   final DateTime date;
   final String departmentId;
 
   const UpdateRecordModal({
     super.key,
+    required this.selectedEmployeeId,
     required this.displayRecord,
     required this.date,
     required this.departmentId,
@@ -23,6 +27,7 @@ class UpdateRecordModal extends ConsumerStatefulWidget {
 }
 
 class _UpdateRecordModalState extends ConsumerState<UpdateRecordModal> {
+  Employee? selectedEmployee;
   late RecordType selectedType;
   TimeOfDay? startTime;
   TimeOfDay? endTime;
@@ -72,8 +77,9 @@ class _UpdateRecordModalState extends ConsumerState<UpdateRecordModal> {
   }
 
   Future<void> _submit() async {
-    if ((selectedType == RecordType.SHIFT &&
-        (startTime == null || endTime == null))) {
+    if (selectedEmployee == null ||
+        (selectedType == RecordType.SHIFT &&
+            (startTime == null || endTime == null))) {
       SnackBarService.showNegativeSnackBar(
         context: context,
         message: "Please fill out all fields",
@@ -107,7 +113,7 @@ class _UpdateRecordModalState extends ConsumerState<UpdateRecordModal> {
     }
 
     final updatedDbRecord = widget.displayRecord.record
-        .toDbModel(widget.displayRecord.employeeId)
+        .toDbModel(selectedEmployee!.id)
         .copyWith(start: newStart, end: newEnd, type: selectedType.name);
 
     final weekStart = startOfWeek(date);
@@ -128,21 +134,55 @@ class _UpdateRecordModalState extends ConsumerState<UpdateRecordModal> {
 
   @override
   Widget build(BuildContext context) {
-    final empName = widget.displayRecord.employeeFullName;
+    final employeesAsync = ref.watch(
+      employeesByDepartmentProvider(widget.departmentId),
+    );
 
     return AlertDialog(
       title: const Text("Update Record"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Display employee name read-only
-          TextFormField(
-            initialValue: empName,
-            enabled: false,
-            decoration: const InputDecoration(
-              labelText: "Employee",
-              border: OutlineInputBorder(),
-            ),
+          employeesAsync.when(
+            loading:
+                () => const Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+            error: (e, _) => Text('Error: $e'),
+            data:
+                (either) => either.match(
+                  (failure) => Text("Error: ${failure.message}"),
+                  (employees) {
+                    selectedEmployee ??=
+                        employees
+                            .where(
+                              (e) => e.id == widget.displayRecord.employeeId,
+                            )
+                            .first;
+                    return DropdownButtonFormField<Employee>(
+                      value: selectedEmployee,
+                      isExpanded: true,
+                      decoration: const InputDecoration(
+                        labelText: "Select Employee",
+                        border: OutlineInputBorder(),
+                      ),
+                      items:
+                          employees
+                              .map(
+                                (e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(e.getFullName()),
+                                ),
+                              )
+                              .toList(),
+                      onChanged:
+                          (value) => setState(() {
+                            selectedEmployee = value;
+                          }),
+                    );
+                  },
+                ),
           ),
           const SizedBox(height: 16),
           Wrap(

@@ -122,6 +122,7 @@ class EmployeeRecordItem extends ConsumerWidget {
               context: context,
               builder:
                   (_) => UpdateRecordModal(
+                    selectedEmployeeId: displayRecord.employeeId,
                     date: date,
                     displayRecord: displayRecord,
                     departmentId: currentDepartmentId,

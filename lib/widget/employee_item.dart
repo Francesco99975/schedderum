@@ -174,14 +174,16 @@ class EmployeeItem extends ConsumerWidget {
           trailing: Wrap(
             spacing: 6,
             children: [
-              IconButton(
-                icon: const Icon(Icons.phone),
-                onPressed: () => _launchPhone(employee.phone),
-              ),
-              IconButton(
-                icon: const Icon(Icons.mail),
-                onPressed: () => _launchEmail(employee.email),
-              ),
+              if (employee.phone.isNotEmpty)
+                IconButton(
+                  icon: const Icon(Icons.phone),
+                  onPressed: () => _launchPhone(employee.phone),
+                ),
+              if (employee.email.isNotEmpty)
+                IconButton(
+                  icon: const Icon(Icons.mail),
+                  onPressed: () => _launchEmail(employee.email),
+                ),
             ],
           ),
         ),

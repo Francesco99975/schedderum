@@ -50,29 +50,33 @@ class _EmployeeFormDialogState extends ConsumerState<EmployeeFormDialog> {
     }
     _formKey.currentState!.save();
 
-    // Validate Email
-    const emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
-    final re = RegExp(emailPattern);
-    if (!re.hasMatch(email)) {
-      return Left(Failure(message: 'Please enter a valid email'));
+    if (email.isNotEmpty) {
+      // Validate Email
+      const emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+      final re = RegExp(emailPattern);
+      if (!re.hasMatch(email)) {
+        return Left(Failure(message: 'Please enter a valid email'));
+      }
     }
 
-    // Validate Phone
-    final digitsOnly = phone.replaceAll(RegExp(r'\D'), '');
+    if (phone.isNotEmpty) {
+      // Validate Phone
+      final digitsOnly = phone.replaceAll(RegExp(r'\D'), '');
 
-    if (digitsOnly.length != 10) {
-      return Left(Failure(message: 'Please enter a valid phone number'));
+      if (digitsOnly.length != 10) {
+        return Left(Failure(message: 'Please enter a valid phone number'));
+      }
+
+      final phonePattern = RegExp(r'^\d{10}$');
+      if (!phonePattern.hasMatch(digitsOnly)) {
+        return Left(Failure(message: 'Please enter a valid phone number'));
+      }
+
+      final area = digitsOnly.substring(0, 3);
+      final prefix = digitsOnly.substring(3, 6);
+      final line = digitsOnly.substring(6, 10);
+      phone = '($area) $prefix-$line';
     }
-
-    final phonePattern = RegExp(r'^\d{10}$');
-    if (!phonePattern.hasMatch(digitsOnly)) {
-      return Left(Failure(message: 'Please enter a valid phone number'));
-    }
-
-    final area = digitsOnly.substring(0, 3);
-    final prefix = digitsOnly.substring(3, 6);
-    final line = digitsOnly.substring(6, 10);
-    phone = '($area) $prefix-$line';
 
     final emp = Employee(
       id: widget.initial?.id ?? uuid(),
@@ -167,20 +171,6 @@ class _EmployeeFormDialogState extends ConsumerState<EmployeeFormDialog> {
                         border: OutlineInputBorder(),
                       ),
                       onSaved: (v) => phone = v ?? '',
-                    ),
-                    TextFormField(
-                      initialValue: priority.toString(),
-                      decoration: const InputDecoration(
-                        labelText: 'Priority',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator:
-                          (v) =>
-                              int.tryParse(v ?? '') == null
-                                  ? 'Invalid number'
-                                  : null,
-                      onSaved: (v) => priority = int.parse(v!),
                     ),
                     SwitchListTile(
                       title: const Text('Manager'),
